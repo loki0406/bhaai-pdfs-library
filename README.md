@@ -1,75 +1,136 @@
-# Bhaai PDFs — free study library
+<div align="center">
 
-A responsive library using the original Bhaai handprint logo, Syne / Instrument Sans typography, coral and teal accents, and dark glass panels. No payment integration. Visitors need no account.
+<img src="public/logo.jpeg" alt="Bhaai PDFs handprint logo" width="88" />
 
-## Deploy on Vercel
+# BHAAI PDFS · LIBRARY
 
-1. Import `loki0406/bhaai-pdfs-library` as a new Vercel project. Framework: Vite. Build: `npm run build`. Output: `dist`.
-2. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` using the values in `.env.example`. These are public browser credentials, not secret keys. Do not add a service-role key.
-3. Deploy. Environment changes require a fresh deployment.
+### Your next exam. Our shared notes.
 
-## Supabase setup (required for Bhaai Adda)
+Free study materials. A little less searching. A lot more studying.
 
-1. Open your project SQL Editor and run `supabase/setup.sql` (the main transaction).
-2. Authentication → Users → Add user. Email: `srisatyalokesh80@gmail.com`. Set your own strong password and confirm the email. Do not send the password to anyone.
-3. Run this SQL after creating the user:
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-Database_%26_Storage-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-Deployment-111111?style=flat-square&logo=vercel)
 
-```sql
-insert into public.library_admins(user_id)
-select id from auth.users
-where lower(email)='srisatyalokesh80@gmail.com' and email_confirmed_at is not null
-on conflict do nothing;
+**BY STUDENTS. FOR STUDENTS.**
+
+[Explore the source](https://github.com/loki0406/bhaai-pdfs-library) · [Contact Bhaai](mailto:srisatyalokesh80@gmail.com)
+
+</div>
+
+---
+
+## One adda for your next exam
+
+Bhaai PDFs brings academic PDFs, exam answers, revision notes and useful documents into one shared library. Visitors can browse and download without creating an account.
+
+| On the shelf | What you’ll find |
+| --- | --- |
+| **Mid-1 & Mid-2 PDFs** | Materials organised by exam and subject |
+| **Semester PDFs** | Resources for semester exam revision |
+| **Other important documents** | Useful materials beyond the exam shelf |
+| **Bhaai Tweet & Notes** | Read-only updates and reminders from Bhaai’s desk |
+
+## Built to make studying easier
+
+- **Find it quickly:** search titles, subjects and units; filter by semester or category; sort by newest or title.
+- **Read, download, share:** preview eligible PDFs, keep files offline and share material links with WhatsApp study groups.
+- **Know your way back:** subject navigation, breadcrumbs and Back buttons, including a return from the Notes feed.
+- **Make it yours:** light and dark themes with a saved browser preference.
+- **Ask Bhaai:** a local website guide that helps find loaded materials and explains how the library works. It does not read PDFs or call an AI service.
+- **Get help:** a dedicated Contact Bhaai card opens an email for website, download or material-link issues.
+
+## The look & feel
+
+The original handprint identity meets **Syne** headings, **Instrument Sans** body text, charcoal surfaces, coral highlights and teal accents. Illustrated shelves, rounded cards and responsive layouts keep the experience consistent across phones and desktops. Animations respect reduced-motion preferences.
+
+## Add a document through GitHub
+
+Place an intended public file in this structure:
+
+```text
+public/materials/
+└── 4-1/
+    └── Reinforcement-Learning/
+        └── Mid-2/
+            └── Your PDF.pdf
 ```
 
-4. Disable public signups in Supabase Authentication settings if not needed. Public visitors do not need authentication.
-5. Open the website → Admin Login → sign in using your email or existing username and your password. Upload a document, verify that it appears publicly, preview/download it, and test WhatsApp sharing.
+Use `Mid-1`, `Mid-2`, `Semester` or `General` for the category folder. Subject-folder hyphens become spaces. Commit to `main`; the catalogue generator indexes the files during the next deployment, so you do not need to create cards manually.
 
-Only user IDs explicitly in `library_admins` can upload/delete. A matching email or username alone never grants admin access. Reset a forgotten admin password securely through the Supabase dashboard. Auth sessions use Supabase's standard browser persistence; sign out on shared devices.
+Keep each file at **10 MiB or less**. Publish only materials you own or have permission to distribute. GitHub files are managed in GitHub; database-backed uploads are stored separately in Supabase. Public file URLs are not protected documents.
 
-## Add materials through GitHub
+## A small footer, a shared journey
 
-Upload files using this folder structure, then commit to main:
+The community section follows these **2026 dates in Indian Standard Time**, including when the page remains open:
 
+| Dates | Footer experience |
+| --- | --- |
+| Through 5 November | Link to the separate fundraising website |
+| 6–9 November | Contribution thank-you, confetti and a Celebrate button |
+| 10–14 November | Community section hidden |
+| 15–27 November | 4-1 semester exam wishes; Thank you button releases floating hearts |
+| 28–30 November | Exam-completion note celebrating another B.Tech milestone |
+| From 1 December | Community section hidden |
+
+The Contact Bhaai card stays available independently of this schedule. Payments are handled on the separate fundraising website, not inside this library.
+
+## Under the hood
+
+| Layer | Technology |
+| --- | --- |
+| Interface | HTML, CSS and JavaScript modules |
+| Build | Vite |
+| Public catalogue | Build-time JSON generated from GitHub materials |
+| Published resources & notes | Supabase database and storage |
+| Hosting | Vercel |
+
+```text
+src/                 Interface, navigation, notes and scheduled messages
+public/materials/    GitHub-managed public study files
+public/covers/       Illustrated shelf artwork
+scripts/             Catalogue generation
+api/                 Serverless endpoints
+supabase/            Database migrations and access policies
+tests/               Behaviour checks
 ```
-public/materials/4-1/Reinforcement-Learning/Mid-2/Your PDF.pdf
-```
 
-Use `Mid-1`, `Mid-2`, `Semester`, or `General` as the category folder. Subject hyphens become spaces. Vercel rebuilds from main and automatically indexes every file; no manual card editing. Each file must be <=10 MiB (10,485,760 bytes). Keep only intended public documents in this folder. Use Supabase uploads when you want descriptions and explicit unit labels. Exam-to-unit mappings have deliberately not been invented.
+## Run locally
 
-The provided sample is listed under 4-1 / Reinforcement Learning / Mid-2; move its folder if the semester is different. Uploaded files are stored in Supabase, not committed back to GitHub. GitHub files are managed through GitHub; Supabase uploads can be removed through Bhaai Adda. Storage quotas depend on your plan; check usage as your collection grows.
-
-## Fundraising footer
-
-`GET /api/fundraiser` reads the support site's public campaign API. Once `mode` is `live` and `raised >= goal`, the donation link is replaced by a thank-you message. No test payments count. If the campaign API is unavailable, the footer retains the support link; change the footer manually if the fundraising backend is retired. This check does not run in the local Vite dev server; it runs on Vercel. No payments are processed on this website.
-
-## Local development and checks
-
-```
+```bash
 npm install
 cp .env.example .env
-node scripts/catalogue.mjs
+# Configure the public Supabase project URL and publishable key locally.
 npm run dev
+```
+
+Generate the catalogue before local browsing if materials changed:
+
+```bash
+node scripts/catalogue.mjs
+```
+
+Verify and build:
+
+```bash
 npm run check
+npm test
 npm run build
 ```
 
-Manual acceptance: search/filter empty states, PDF preview, file download, shared material URL, mobile navigation, unauthenticated upload rejection, admin upload/delete, >10 MB rejection, fundraiser live completion. Preview/download only materials you have the right to distribute. No analytics or invented download counts.
+For Vercel, use the **Vite** preset, `npm run build` and the `dist` output directory. Configure the public Supabase variables from `.env.example` in the deployment environment. Database features require the repository’s applicable migrations and access policies. Never place secret or service-role keys in browser variables or commit credentials.
 
-## Themes and Ask Bhaai
+## A note on the materials
 
-The horizontal sun/moon control switches the entire interface, including dialogs and chat. The selected theme is saved only in this browser’s local storage; dark is the initial default.
+These resources are study aids for revision. Verify answers against your syllabus and official course material. No invented download counts or analytics are used. Ask Bhaai’s conversation stays in the current page session.
 
-Ask Bhaai is a free, local website guide with a floating chat panel. It answers common website questions, searches loaded catalogue titles and subjects, and links users to materials or Bhaai Adda. It does not call an AI service or read PDF contents. Conversation history exists only while the page is open and is not stored or sent anywhere. Fundraising suggestions respect the footer’s live completion status. No new environment variables or database changes are required.
+---
 
+<div align="center">
 
-### BHAAI ADDA and read-only notes
+**Made with care. Shared for free.**
 
-The public interface is identical for all visitors. There are no student accounts, reaction buttons, comment forms, anonymous sign-ins, or public post composers. The Admin Login option opens `/adda.html`. Only the verified admin can enter BHAAI ADDA. Signing in or out never adds management controls to the public library.
+Having an issue? [Contact Bhaai ↗](mailto:srisatyalokesh80@gmail.com)
 
-Run `supabase/setup.sql`, `supabase/notes.sql`, then **`supabase/adda.sql`** in the Supabase SQL Editor. Existing installations need only `adda.sql`. It adds publication/preview/download flags and revokes old visitor reaction permissions without deleting historical data. Disable Anonymous Sign-ins; they are no longer needed. Keep public signups disabled. Retain the existing approved `library_admins` membership and your own admin credentials.
-
-BHAAI ADDA supports upload, edit metadata, publish/hide, show/hide preview and download buttons, delete uploaded materials, publish notes and delete notes. Changes reach visitors on refresh or within 60 seconds (notes within 30 seconds while the feed is open). GitHub materials remain managed in GitHub and appear after deployment. Hiding a listing or download button does not revoke an existing public file URL: this library serves public study materials, not protected documents.
-
-The dashboard uses the existing handprint, Syne/Instrument Sans, charcoal/coral/teal palette, responsive navigation, entrance transitions and reduced-motion support. The public library design, illustrated shelves, subject navigation, Back buttons, theme toggle, guide, previews and sharing are preserved.
-
-Validation after deployment: sign in from Admin Login, confirm a non-admin cannot manage content, upload a test document, edit and hide/publish it, verify public visibility in a private window, toggle preview/download buttons, publish/delete a note, delete the test material, sign out and reopen `/adda.html`. Public visitors must never see admin tools or like/comment controls.
+</div>

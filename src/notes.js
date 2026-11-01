@@ -8,6 +8,6 @@ export function setupNotes({db,esc}){
   $('#tweets').innerHTML=data.map(p=>`<article class="tweet"><div class="tweet-heading"><img src="/logo.jpeg" alt=""><div><strong>Bhaai PDFs <span class="verified">✦</span></strong><span>From Bhaai’s desk · ${esc(new Date(p.created_at).toLocaleString())}</span></div></div><p class="tweet-body">${esc(p.body)}</p></article>`).join('');
  }
  $('#notes-open').onclick=()=>{open=true;$('#notes-feed').hidden=false;$('#notes-open').hidden=true;load();$('#notes-feed').scrollIntoView({behavior:'smooth'});};
- $('#notes-back').onclick=()=>{open=false;$('#notes-feed').hidden=true;$('#notes-open').hidden=false;};
+ $('#notes-back').onclick=()=>{open=false;$('#notes-feed').hidden=true;$('#notes-open').hidden=false;$('#notes-module').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});$('#notes-open').focus({preventScroll:true});};
  setInterval(()=>{if(open&&!document.hidden)load();},30000);
 }
