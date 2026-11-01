@@ -1,0 +1,1 @@
+{"name":"bhaai-pdfs-library","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"vite --host 0.0.0.0","build":"node scripts/catalogue.mjs && vite build","check":"node --check src/main.js && node --check api/fundraiser.js"},"dependencies":{"@supabase/supabase-js":"^2.81.1"},"devDependencies":{"vite":"^6.4.1"}}
