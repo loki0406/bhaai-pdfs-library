@@ -34,7 +34,7 @@ Bhaai PDFs brings academic PDFs, exam answers, revision notes and useful documen
 
 ## Built to make studying easier
 
-- **Find it quickly:** search titles, subjects and units; filter by semester or category; sort by newest or title.
+- **Find it quickly:** choose an exam category, pick a subject and browse its materials, with the newest files first.
 - **Read, download, share:** preview eligible PDFs, keep files offline and share material links with WhatsApp study groups.
 - **Know your way back:** subject navigation, breadcrumbs and Back buttons, including a return from the Notes feed.
 - **Make it yours:** light and dark themes with a saved browser preference.
