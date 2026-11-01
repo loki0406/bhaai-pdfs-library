@@ -20,3 +20,6 @@
 .celebration-confetti i{position:absolute;left:var(--x);top:-24px;width:9px;height:16px;border-radius:2px;background:var(--color);animation:bhaai-confetti 3.2s var(--delay) ease-out both}
 @keyframes bhaai-confetti{0%{transform:translate3d(0,-20px,0) rotate(0);opacity:1}85%{opacity:1}100%{transform:translate3d(var(--drift),105vh,0) rotate(var(--spin));opacity:0}}
 @media(prefers-reduced-motion:reduce){.celebration-confetti{display:none}}
+
+.celebration-hearts i{top:auto;bottom:-40px;width:auto;height:auto;background:none!important;font-style:normal;font-size:26px;color:#ff798e;animation-name:bhaai-hearts}
+@keyframes bhaai-hearts{0%{transform:translate3d(0,0,0) scale(.6);opacity:0}15%{opacity:1}80%{opacity:1}100%{transform:translate3d(var(--drift),-105vh,0) scale(1.2);opacity:0}}
