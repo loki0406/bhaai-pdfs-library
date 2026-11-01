@@ -54,3 +54,9 @@ npm run build
 ```
 
 Manual acceptance: search/filter empty states, PDF preview, file download, shared material URL, mobile navigation, unauthenticated upload rejection, admin upload/delete, >10 MB rejection, fundraiser live completion. Preview/download only materials you have the right to distribute. No analytics or invented download counts.
+
+## Themes and Ask Bhaai
+
+The horizontal sun/moon control switches the entire interface, including dialogs and chat. The selected theme is saved only in this browser’s local storage; dark is the initial default.
+
+Ask Bhaai is a free, local website guide with a floating chat panel. It answers common website questions, searches loaded catalogue titles and subjects, and links users to materials or Bhaai Adda. It does not call an AI service or read PDF contents. Conversation history exists only while the page is open and is not stored or sent anywhere. Fundraising suggestions respect the footer’s live completion status. No new environment variables or database changes are required.

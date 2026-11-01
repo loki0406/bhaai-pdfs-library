@@ -1,0 +1,15 @@
+import {answerQuestion} from './bhaai-guide.js';
+export function setupExtras({getResources,showResource,openAdmin}) {
+ const $=selector=>document.querySelector(selector);
+ function applyTheme(theme){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#faf6f0':'#0a0a0f';document.querySelectorAll('[data-theme-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.themeChoice===theme)));try{localStorage.setItem('bhaai-theme',theme);}catch{/* Private storage may be unavailable. */}}
+ applyTheme(document.documentElement.dataset.theme==='light'?'light':'dark');
+ document.querySelectorAll('[data-theme-choice]').forEach(button=>button.addEventListener('click',()=>applyTheme(button.dataset.themeChoice)));
+ const panel=$('#bhaai-chat'),launcher=$('#chat-launcher'),input=$('#chat-input'),log=$('#chat-log');
+ function close(){panel.hidden=true;launcher.setAttribute('aria-expanded','false');launcher.focus();}
+ launcher.onclick=()=>{panel.hidden=!panel.hidden;launcher.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)input.focus();};$('#chat-close').onclick=close;
+ panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.stopPropagation();close();}});
+ function message(text,role){const bubble=document.createElement('div');bubble.className=`chat-message ${role}`;bubble.textContent=text;log.append(bubble);log.scrollTop=log.scrollHeight;return bubble;}
+ function action(parent,label,callback){const b=document.createElement('button');b.className='chat-action';b.type='button';b.textContent=label;b.onclick=callback;parent.append(b);}
+ function respond(text){if(!text.trim())return;const q=text.trim().slice(0,500);message(q,'visitor');input.value='';const response=answerQuestion(q,getResources(),$('#fund-link').hidden),bubble=message(response.text,'bhaai');for(const resource of response.resources||[])action(bubble,resource.title+' ↗',()=>{showResource(resource.id);close();});if(response.action==='library')action(bubble,'Open the study shelf ↓',()=>{$('#library').scrollIntoView({behavior:'smooth'});close();$('#search').focus({preventScroll:true});});if(response.action==='admin')action(bubble,'Open Bhaai Adda ↗',()=>{close();openAdmin();});if(response.action==='support'&&!$('#fund-link').hidden){const a=document.createElement('a');a.className='chat-action';a.textContent='Visit the fundraiser ↗';a.href='https://bhaai-pdfs-support.vercel.app/';a.target='_blank';a.rel='noopener';bubble.append(a);}if(response.contact){const a=document.createElement('a');a.className='chat-action';a.href='mailto:srisatyalokesh80@gmail.com';a.textContent='Email Bhaai ↗';bubble.append(a);}while(log.children.length>45)log.firstElementChild.remove();log.scrollTop=log.scrollHeight;}
+ $('#chat-form').onsubmit=event=>{event.preventDefault();respond(input.value);input.focus();};document.querySelectorAll('[data-chat-question]').forEach(b=>b.onclick=()=>respond(b.dataset.chatQuestion));
+}

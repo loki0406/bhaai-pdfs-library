@@ -1,0 +1,30 @@
+// A local website guide. Answers use site instructions and the current catalogue;
+// no messages, credentials, or PDF contents are sent to an AI service.
+export function answerQuestion(message, resources = [], completed = false) {
+ const text=message.toLowerCase().replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim();
+ const has=pattern=>pattern.test(text);
+ if(has(/\b(password|otp|secret|credential)\b/))return {text:'Keep your password and OTP private, bhaai. For Bhaai Adda, use your admin email or bhaaiadmin with the password set in Supabase. If you forgot it, the owner can reset it in the Supabase dashboard.'};
+ if(has(/\b(donat\w*|fundrais\w*|contribut\w*|subscription|chatgpt|400)\b/))return completed?{text:'Goal complete, bhaai! 💚 Thank you to everyone who contributed. The library stays free for everyone.'}:{text:'We’re raising ₹400 to renew the ChatGPT Go subscription used to prepare PDFs for the 4-1 semester exams. Contributions are optional; the library is free. Check the fundraiser for the latest progress.',action:'support'};
+ if(has(/\b(dark|light|theme|sun|moon)\b/))return {text:'Tap ☀️ for light mode or 🌙 for dark mode in the header, bhaai. Your choice is remembered on this browser.'};
+ if(has(/\b(upload\w*|admin|adda|add material\w*|publish\w*|delete|remove)\b/))return {text:'Bhaai Adda is the owner’s corner, bhaai. Sign in there to upload a document with its subject, semester, exam and optional units. Files must be 10 MB or less. Visitors can browse and download freely.',action:'admin'};
+ if(has(/\b(github|deploy\w*|vercel|reflect\w*|update\w*)\b/))return {text:'GitHub materials appear after a commit to main and a successful Vercel deployment. Bhaai Adda uploads appear through Supabase without a redeploy. Refresh the page to see newly added materials.'};
+ if(has(/\b(download\w*|offline|save|not opening|not working|failed|error|broken|problem)\b/))return {text:'Find the material on the study shelf and tap Download ↓ to save it, bhaai. For PDFs, you can also tap Preview. If something fails, refresh and retry; check your connection and allow downloads in your browser. Still stuck? Contact Bhaai.',action:'library',contact:true};
+ if(has(/\b(preview\w*|read|open|view)\b/)&&!has(/\b(find|rl|mid|subject)\b/))return {text:'Tap Preview on a PDF card to read it here. If your browser doesn’t show the PDF, download it and open it with a PDF reader, bhaai.',action:'library'};
+ if(has(/\b(share\w*|whatsapp|friend\w*|group|link)\b/))return {text:'Tap Share ↗ on a material card. It opens WhatsApp with the title and a direct link, ready for your group. Your friend can open that material without signing in, bhaai.',action:'library'};
+ if(has(/\b(free|cost|pay|price|fee|login|account|sign up|register)\b/))return {text:'All study materials are free, bhaai. No account or payment is needed to preview, download or share. Only the owner signs in to Bhaai Adda to manage uploads.'};
+ if(has(/\b(size|format\w*|limit|mb|ppt|docx|zip|file type\w*)\b/))return {text:'Each file can be up to 10 MB, bhaai. Supported formats: PDF, Word, PowerPoint, Excel, TXT, PNG, JPG and ZIP. PDFs have an in-page preview; the other formats can be downloaded.'};
+ if(has(/\b(contact|owner|email|support|report)\b/))return {text:'Need a correction, a missing material, or help with this site? Contact Bhaai at srisatyalokesh80@gmail.com.',contact:true};
+ if(has(/\b(who|what is|about|purpose)\b/)&&has(/\b(bhaai|website|site|library)\b/))return {text:'Bhaai PDFs is a student initiative sharing free study notes, exam answers and materials. One adda to find your subject, download a PDF and pass it on to your friends, bhaai.',action:'library'};
+ if(has(/\b(hi|hello|hey|namaste|thanks|thank you|bye)\b/)&&text.split(' ').length<=5)return {text:'Hey bhaai! 👋 Need a PDF or a little help? Ask about subjects, downloads, sharing or Bhaai Adda.'};
+ if(has(/\b(unit\w*|mid\s*-?\s*[12]|semester|syllabus)\b/)&&has(/\b(which|mapping|included|cover\w*|syllabus)\b/))return {text:'Units are shown when the uploader supplies them, bhaai. There’s no fixed Mid-1/Mid-2 unit mapping here—check your subject’s syllabus. You can search a unit number or filter by exam.',action:'library'};
+ if(has(/\b(subject\w*|available|material\w*|pdf\w*|note\w*|find|search|latest|newest|recent|rl|reinforcement|mid|semester)\b/)) {
+  const ignored=new Set('i me my we can you please bhaai bhai show give get want need do have has any all the a an and for of in on to is are there find search pdf pdfs notes material materials subject subjects available latest newest recent exams exam question questions answer answers'.split(' '));
+  const words=text.replace(/mid\s*-?\s*([12])/g,'mid-$1').split(' ').filter(w=>!ignored.has(w)&&w.length>1).map(w=>w==='rl'?'reinforcement':w);
+  const exam=text.match(/mid\s*-?\s*([12])/);
+  const candidates=exam?resources.filter(r=>r.category.toLowerCase()==='mid-'+exam[1]):resources;
+  let found=candidates.map(r=>{const hay=[r.title,r.subject,r.semester,r.category,r.units].join(' ').toLowerCase().replace(/mid\s*-?\s*([12])/g,'mid-$1');return {r,score:words.filter(w=>hay.includes(w)).length};}).filter(x=>!words.length||x.score>0).sort((a,b)=>b.score-a.score||new Date(b.r.created_at)-new Date(a.r.created_at)).slice(0,4).map(x=>x.r);
+  if(!found.length)return {text:resources.length?'I couldn’t find a matching material in the loaded library, bhaai. Try the subject’s full name or browse the shelf. More uploads may arrive later.':'The study shelf hasn’t loaded any materials yet, bhaai. Refresh the page, then try again.',action:'library'};
+  return {text:has(/\b(subjects)\b/)?`On the loaded shelf: ${[...new Set(resources.map(r=>r.subject))].join(', ')}. Tap a material below to find it, bhaai.`:'Here’s what I found on the study shelf, bhaai. 👇',resources:found.map(r=>({id:r.id,title:r.title}))};
+ }
+ return {text:'I’m your website guide, bhaai 👋 I can help find materials and explain downloads, sharing, themes, Bhaai Adda or fundraising. Try “Find RL PDFs” or “How do I download?” I can’t read the answers inside PDFs.',action:'library'};
+}
