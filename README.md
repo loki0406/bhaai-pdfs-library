@@ -22,7 +22,7 @@ on conflict do nothing;
 ```
 
 4. Disable public signups in Supabase Authentication settings if not needed. Public visitors do not need authentication.
-5. Open the website → Bhaai Adda → sign in using `bhaaiadmin` (or your email) and your password. Upload a document, verify that it appears publicly, preview/download it, and test WhatsApp sharing.
+5. Open the website → Bhaai Adda → sign in using your email or existing username and your password. Upload a document, verify that it appears publicly, preview/download it, and test WhatsApp sharing.
 
 Only user IDs explicitly in `library_admins` can upload/delete. A matching email or username alone never grants admin access. Reset a forgotten admin password securely through the Supabase dashboard. Auth sessions use Supabase's standard browser persistence; sign out on shared devices.
 
@@ -60,3 +60,16 @@ Manual acceptance: search/filter empty states, PDF preview, file download, share
 The horizontal sun/moon control switches the entire interface, including dialogs and chat. The selected theme is saved only in this browser’s local storage; dark is the initial default.
 
 Ask Bhaai is a free, local website guide with a floating chat panel. It answers common website questions, searches loaded catalogue titles and subjects, and links users to materials or Bhaai Adda. It does not call an AI service or read PDF contents. Conversation history exists only while the page is open and is not stored or sent anywhere. Fundraising suggestions respect the footer’s live completion status. No new environment variables or database changes are required.
+
+
+### Illustrated shelves and Bhaai Tweet & Notes
+
+Run `supabase/notes.sql` in the same Supabase project after the original setup. It is safe to rerun. Enable **Authentication → Providers → Anonymous Sign-ins** for visitor likes/comments. Visitors never receive post or moderation permissions. Admin access still requires membership in `library_admins`.
+
+Open Bhaai Tweet & Notes, then sign in through Bhaai Adda to reveal the post composer and remove-comment controls. Public visitors can read, like/unlike once per browser account, and comment with a display name. Anonymous accounts are not verified identities and can be replaced by clearing browser data. Comments have a 15-second per-account throttle; enable Supabase CAPTCHA protection if public spam develops. Feed loads the latest 50 posts. No mock posts or reactions are shown.
+
+Library navigation: four illustrated shelves → subject → materials. The first three shelves share subject names already found in the catalogue; Other Imp Documents opens its documents directly. Include your actual course code in the subject field (for example `Subject name · course code`). The full prior course list was unavailable, so no codes were invented. Add materials to populate more subjects. New uploads are refreshed for other visitors within a minute. NEW appears only on the newest material across the entire catalogue; the next upload takes the badge. PDF/image/text previews use the browser; Office document previews use Microsoft’s public Office viewer and may depend on that service. ZIP files are download-only.
+
+Generated card covers are in `public/covers/`: mid1.webp, mid2.webp, semester.webp, other.webp, notes.webp. Built-in image generation used a charcoal studio backdrop, sculptural cream paper, coral and teal highlights: single notebook; paired notebooks; textbook/graduation cap; document folders; reference handprint with a small cream bird in its palm. All files are used locally by the website.
+
+Validate after deployment: open each shelf, open a subject and preview/download/share a material; upload a newer document and confirm the old NEW badge disappears; confirm the login is blank; publish a note as admin; in a private window like/comment and verify no post composer; as admin remove that comment. Anonymous Sign-ins and the SQL migration are manual project setup steps and were not executed by the code update.

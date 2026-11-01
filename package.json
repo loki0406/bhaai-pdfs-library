@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "node scripts/catalogue.mjs && vite build",
-    "check": "node --check src/main.js && node --check src/extras.js && node --check src/bhaai-guide.js && node --check api/fundraiser.js"
+    "check": "node --check src/library-navigation.js && node --check src/notes.js && node --check src/main.js && node --check src/extras.js && node --check src/bhaai-guide.js && node --check api/fundraiser.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.81.1"
