@@ -1,4 +1,4 @@
--- Run after setup.sql. Enable Authentication > Providers > Anonymous Sign-ins.
+-- Run after setup.sql. Visitor sign-in is not needed. Apply adda.sql after this migration.
 begin;
 create table if not exists public.bhaai_posts(id uuid primary key default gen_random_uuid(),body text not null check(char_length(trim(body)) between 1 and 2000),created_at timestamptz not null default now());
 create table if not exists public.bhaai_likes(post_id uuid references public.bhaai_posts on delete cascade,user_id uuid references auth.users on delete cascade,primary key(post_id,user_id));

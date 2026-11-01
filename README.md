@@ -22,7 +22,7 @@ on conflict do nothing;
 ```
 
 4. Disable public signups in Supabase Authentication settings if not needed. Public visitors do not need authentication.
-5. Open the website → Bhaai Adda → sign in using your email or existing username and your password. Upload a document, verify that it appears publicly, preview/download it, and test WhatsApp sharing.
+5. Open the website → Admin Login → sign in using your email or existing username and your password. Upload a document, verify that it appears publicly, preview/download it, and test WhatsApp sharing.
 
 Only user IDs explicitly in `library_admins` can upload/delete. A matching email or username alone never grants admin access. Reset a forgotten admin password securely through the Supabase dashboard. Auth sessions use Supabase's standard browser persistence; sign out on shared devices.
 
@@ -62,14 +62,14 @@ The horizontal sun/moon control switches the entire interface, including dialogs
 Ask Bhaai is a free, local website guide with a floating chat panel. It answers common website questions, searches loaded catalogue titles and subjects, and links users to materials or Bhaai Adda. It does not call an AI service or read PDF contents. Conversation history exists only while the page is open and is not stored or sent anywhere. Fundraising suggestions respect the footer’s live completion status. No new environment variables or database changes are required.
 
 
-### Illustrated shelves and Bhaai Tweet & Notes
+### BHAAI ADDA and read-only notes
 
-Run `supabase/notes.sql` in the same Supabase project after the original setup. It is safe to rerun. Enable **Authentication → Providers → Anonymous Sign-ins** for visitor likes/comments. Visitors never receive post or moderation permissions. Admin access still requires membership in `library_admins`.
+The public interface is identical for all visitors. There are no student accounts, reaction buttons, comment forms, anonymous sign-ins, or public post composers. The Admin Login option opens `/adda.html`. Only the verified admin can enter BHAAI ADDA. Signing in or out never adds management controls to the public library.
 
-Open Bhaai Tweet & Notes, then sign in through Bhaai Adda to reveal the post composer and remove-comment controls. Public visitors can read, like/unlike once per browser account, and comment with a display name. Anonymous accounts are not verified identities and can be replaced by clearing browser data. Comments have a 15-second per-account throttle; enable Supabase CAPTCHA protection if public spam develops. Feed loads the latest 50 posts. No mock posts or reactions are shown.
+Run `supabase/setup.sql`, `supabase/notes.sql`, then **`supabase/adda.sql`** in the Supabase SQL Editor. Existing installations need only `adda.sql`. It adds publication/preview/download flags and revokes old visitor reaction permissions without deleting historical data. Disable Anonymous Sign-ins; they are no longer needed. Keep public signups disabled. Retain the existing approved `library_admins` membership and your own admin credentials.
 
-Library navigation: four illustrated shelves → subject → materials. The first three shelves always display the six configured 4-1 subjects and course codes from `src/subjects.js`, including empty subjects; Other Imp Documents opens its documents directly. Admin uploads use a subject selector. Existing documents match by subject name or course code, so adding codes does not hide earlier uploads. Search also accepts course codes. New uploads are refreshed for other visitors within a minute. NEW appears only on the newest material across the entire catalogue; the next upload takes the badge. PDF/image/text previews use the browser; Office document previews use Microsoft’s public Office viewer and may depend on that service. ZIP files are download-only.
+BHAAI ADDA supports upload, edit metadata, publish/hide, show/hide preview and download buttons, delete uploaded materials, publish notes and delete notes. Changes reach visitors on refresh or within 60 seconds (notes within 30 seconds while the feed is open). GitHub materials remain managed in GitHub and appear after deployment. Hiding a listing or download button does not revoke an existing public file URL: this library serves public study materials, not protected documents.
 
-Generated card covers are in `public/covers/`: mid1.webp, mid2.webp, semester.webp, other.webp, notes.webp. Built-in image generation used a charcoal studio backdrop, sculptural cream paper, coral and teal highlights: single notebook; paired notebooks; textbook/graduation cap; document folders; reference handprint with a small cream bird in its palm. All files are used locally by the website.
+The dashboard uses the existing handprint, Syne/Instrument Sans, charcoal/coral/teal palette, responsive navigation, entrance transitions and reduced-motion support. The public library design, illustrated shelves, subject navigation, Back buttons, theme toggle, guide, previews and sharing are preserved.
 
-Validate after deployment: open each shelf, open a subject and preview/download/share a material; upload a newer document and confirm the old NEW badge disappears; confirm the login is blank; publish a note as admin; in a private window like/comment and verify no post composer; as admin remove that comment. Anonymous Sign-ins and the SQL migration are manual project setup steps and were not executed by the code update.
+Validation after deployment: sign in from Admin Login, confirm a non-admin cannot manage content, upload a test document, edit and hide/publish it, verify public visibility in a private window, toggle preview/download buttons, publish/delete a note, delete the test material, sign out and reopen `/adda.html`. Public visitors must never see admin tools or like/comment controls.
