@@ -1,3 +1,4 @@
+import {setupSupportSchedule} from './support-schedule.js';
 import {subjects as courseSubjects,canonicalSubject} from './subjects.js';
 import {setupLibrary} from './library-navigation.js';
 import {setupNotes} from './notes.js';
@@ -29,10 +30,12 @@ $('#catalogue').addEventListener('click',async e=>{const b=e.target.closest('[da
 $('#preview-close').onclick=()=>$('#preview').close();$('#preview').addEventListener('close',()=>$('#pdf-frame').src='about:blank');
 function openAdmin(){location.href='/adda.html';}
 $('#admin-open').onclick=openAdmin;
-async function fundraiser(){try{const response=await fetch('/api/fundraiser');if(!response.ok)return;const data=await response.json();if(data.completed){$('#fund-copy').textContent='Our fundraising goal is complete. Thank you to everyone who contributed and helped keep Bhaai PDFs going for the 4-1 semester exams. The library remains free for everyone.';$('#fundraiser h2').innerHTML='You made it happen.<br>Thank you, bhaai.';$('#fund-link').hidden=true;}}catch{/* Keep the support link available when campaign status is unavailable. */}}
+
 setupExtras({getResources:()=>resources,showResource(id){const r=resources.find(r=>r.id===id);if(!r)return;category='';$('#semester').value='';$('#subject').value='';$('#search').value=r.title;document.querySelectorAll('[data-category]').forEach(b=>b.classList.toggle('active',b.dataset.category===''));render();$('#library').scrollIntoView({behavior:'smooth'});},openAdmin});
-async function init(){await load();fundraiser();const shared=new URLSearchParams(location.search).get('resource');if(shared){const r=resources.find(r=>r.id===shared);if(r){$('#search').value=r.title;render();$('#library').scrollIntoView();if(r.allow_preview!==false&&(r.source==='GitHub'?r.url:r.storage_path).toLowerCase().endsWith('.pdf'))preview(r);}else toast('This material is no longer available. Explore the library below.');}
+async function init(){await load();const shared=new URLSearchParams(location.search).get('resource');if(shared){const r=resources.find(r=>r.id===shared);if(r){$('#search').value=r.title;render();$('#library').scrollIntoView();if(r.allow_preview!==false&&(r.source==='GitHub'?r.url:r.storage_path).toLowerCase().endsWith('.pdf'))preview(r);}else toast('This material is no longer available. Explore the library below.');}
 
 }
 setInterval(()=>{if(!document.hidden)load().catch(()=>{});},60000);
 init().catch(()=>toast("The library could not finish loading. Please refresh."));
+
+setupSupportSchedule();

@@ -12,3 +12,11 @@
 .course-code{font:600 12px "Instrument Sans",sans-serif;letter-spacing:1px;color:var(--orange);margin:0 0 25px}.subject-card h3{overflow-wrap:anywhere}
 
 .shelf-back{display:inline-flex;align-items:center;gap:12px;margin:25px 0 0;padding:13px 19px;border:1px solid #ff79494d;border-radius:14px 6px 14px 6px;background:linear-gradient(120deg,#ff79491c,#ff794908);color:var(--orange);font:600 14px "Instrument Sans",sans-serif;cursor:pointer;transition:transform .2s,background .2s,border-color .2s}.shelf-back span{font-size:20px;line-height:1;transition:transform .2s}.shelf-back:hover{background:#ff794925;border-color:var(--orange)}.shelf-back:hover span{transform:translateX(-4px)}.shelf-back:focus-visible{outline:2px solid var(--orange);outline-offset:4px}#library{scroll-margin-top:100px}[data-theme=light] .shelf-back{color:#a63a18;border-color:#c9673a66;background:#f6e5d7}@media(max-width:600px){.shelf-back{min-height:44px;width:100%;justify-content:center}}
+
+/* The community thank-you uses the same orange and teal library palette. */
+.support-thanks{background:radial-gradient(ellipse at 0 0,#ff79491f,transparent 65%),radial-gradient(ellipse at 100% 100%,#68d6b91a,transparent 65%)}
+.support-thanks .primary{flex-shrink:0;cursor:pointer}
+.celebration-confetti{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.celebration-confetti i{position:absolute;left:var(--x);top:-24px;width:9px;height:16px;border-radius:2px;background:var(--color);animation:bhaai-confetti 3.2s var(--delay) ease-out both}
+@keyframes bhaai-confetti{0%{transform:translate3d(0,-20px,0) rotate(0);opacity:1}85%{opacity:1}100%{transform:translate3d(var(--drift),105vh,0) rotate(var(--spin));opacity:0}}
+@media(prefers-reduced-motion:reduce){.celebration-confetti{display:none}}
