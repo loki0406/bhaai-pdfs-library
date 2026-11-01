@@ -31,3 +31,7 @@
 [data-theme=light] .contact-card{background:linear-gradient(115deg,#eef7ef,#fff4ea)}
 @media(max-width:900px){.contact-card{flex-wrap:wrap}.contact-copy{flex-basis:calc(100% - 90px)}.contact-card .primary{margin-left:84px}}
 @media(max-width:600px){.contact-card{padding:25px;gap:18px}.contact-icon{width:46px;height:46px;border-radius:14px;font-size:23px}.contact-copy{flex-basis:100%}.contact-card .primary{margin-left:0;width:100%;justify-content:center}#notes-feed .section-heading{align-items:flex-start;gap:20px;flex-direction:column}}
+
+.contact-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;max-width:460px}.contact-actions .contact-cr{max-width:245px;white-space:normal;text-align:left;line-height:1.5;cursor:default;font-size:13px;border-radius:16px;padding:14px 18px}.contact-card .contact-actions .primary{margin-left:0}
+@media(max-width:900px){.contact-actions{margin-left:84px}}
+@media(max-width:600px){.contact-actions{margin-left:0;width:100%;max-width:none}.contact-actions .contact-cr{width:100%;max-width:none;text-align:center}}
