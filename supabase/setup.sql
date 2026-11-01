@@ -15,7 +15,7 @@ create table if not exists public.resources (
  units text not null default '' check(char_length(units)<=100),
  description text not null default '' check(char_length(description)<=500),
  storage_path text not null unique check(storage_path ~ '^[a-f0-9-]+/[a-f0-9-]+\.(pdf|doc|docx|ppt|pptx|xls|xlsx|txt|png|jpg|jpeg|zip)$'),
- size bigint not null check(size between 1 and 10485760),
+ size bigint not null check(size between 1 and 20971520),
  created_at timestamptz not null default now()
 );
 alter table public.resources enable row level security;
@@ -25,7 +25,7 @@ drop policy if exists "Everyone reads materials" on public.resources;
 create policy "Everyone reads materials" on public.resources for select using(true);
 drop policy if exists "Admins manage materials" on public.resources;
 create policy "Admins manage materials" on public.resources for all to authenticated using(public.is_library_admin()) with check(public.is_library_admin());
-insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values ('materials','materials',true,10485760,array['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/plain','image/png','image/jpeg','application/zip','application/x-zip-compressed','application/octet-stream']) on conflict(id) do update set public=true,file_size_limit=10485760,allowed_mime_types=excluded.allowed_mime_types;
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types) values ('materials','materials',true,20971520,array['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.ms-excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','text/plain','image/png','image/jpeg','application/zip','application/x-zip-compressed','application/octet-stream']) on conflict(id) do update set public=true,file_size_limit=20971520,allowed_mime_types=excluded.allowed_mime_types;
 drop policy if exists "Library admin uploads" on storage.objects;
 create policy "Library admin uploads" on storage.objects for insert to authenticated with check(bucket_id='materials' and public.is_library_admin() and (storage.foldername(name))[1]=(select auth.uid())::text and lower(storage.extension(name)) in ('pdf','doc','docx','ppt','pptx','xls','xlsx','txt','png','jpg','jpeg','zip'));
 drop policy if exists "Library admin deletes" on storage.objects;

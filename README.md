@@ -59,7 +59,7 @@ public/materials/
 
 Use `Mid-1`, `Mid-2`, `Semester` or `General` for the category folder. Subject-folder hyphens become spaces. Commit to `main`; the catalogue generator indexes the files during the next deployment, so you do not need to create cards manually.
 
-Keep each file at **10 MiB or less**. Publish only materials you own or have permission to distribute. GitHub files are managed in GitHub; database-backed uploads are stored separately in Supabase. Public file URLs are not protected documents.
+Keep each file at **20 MiB or less**. Existing Supabase installations must run `supabase/upload-limit-20mb.sql` once to update both the storage bucket and database size constraint. Publish only materials you own or have permission to distribute. GitHub files are managed in GitHub; database-backed uploads are stored separately in Supabase. Public file URLs are not protected documents.
 
 ## A small footer, a shared journey
 
