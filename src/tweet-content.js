@@ -1,0 +1,9 @@
+export const escapeTweet=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function sortPosts(posts){return [...posts].sort((a,b)=>Number(!!b.is_pinned)-Number(!!a.is_pinned)||new Date(b.created_at)-new Date(a.created_at));}
+export function announcementPost(posts,now=Date.now()){
+ return [...posts].filter(p=>p.show_announcement&&now-Date.parse(p.created_at)>=0&&now-Date.parse(p.created_at)<86400000).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0]||null;
+}
+export function tweetMarkup(post,resources,{interactive=true}={}){
+ const esc=escapeTweet;
+ return `<article class="tweet" id="tweet-${esc(post.id||'preview')}" tabindex="-1"><div class="tweet-heading"><img src="/logo.jpeg" alt=""><div><strong>Bhaai PDFs <span class="verified">✦</span></strong><span>${post.is_pinned?'📌 Pinned · ':''}${esc(new Date(post.created_at).toLocaleString())}</span></div></div><p class="tweet-body">${esc(post.body)}</p><div class="tweet-attachments">${(post.material_ids||[]).map(id=>{const r=resources.find(r=>r.id===id&&r.published!==false);if(!r)return '<span class="tweet-unavailable">📄 Material unavailable</span>';return interactive?`<button type="button" class="tweet-attachment" data-note-material="${esc(id)}"><span>📄 ${esc(r.title)}</span><small>Open Material ↗</small></button>`:`<div class="tweet-attachment"><span>📄 ${esc(r.title)}</span><small>Open Material ↗</small></div>`;}).join('')}</div></article>`;
+}

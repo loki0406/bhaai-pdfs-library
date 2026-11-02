@@ -140,3 +140,11 @@ Having an issue? [Contact Bhaai ↗](mailto:srisatyalokesh80@gmail.com)
 The creator workspace supports light/dark themes and separates Add Material, Manage Materials and Tweet & Notes. Manage Materials uses category and subject cards, with Edit/Delete for uploads. Drag cards or use Move up/Move down, then Save Order; Discard Changes restores the last saved order. GitHub documents can be reordered alongside uploads, while their files and metadata remain managed in GitHub.
 
 Run `supabase/material-order.sql` once to enable persistent ordering. It creates a public read-only ordering table and an authenticated, admin-checked save function. Existing documents are preserved. Saved cards come first; newly added, unranked cards follow in newest-first order. Public visitors receive the saved order on refresh or within one minute.
+
+## Tweet attachments & announcements
+
+Run `supabase/tweet-updates.sql` once to enable attachments, pinning, editing and homepage announcements for existing posts. Visitors still need no account; update permissions remain limited to verified admins.
+
+In Tweet & Notes, use Attach Materials, select a category/subject and choose up to 10 published documents. Review the selected chips, optionally pin the tweet or enable its homepage announcement, then preview and publish. Existing tweets can be edited, pinned/unpinned or deleted. Hidden or deleted attachments display Material unavailable publicly.
+
+An enabled announcement is eligible for 24 hours after the original publication time. The latest eligible post appears once per browser on the library home screen, with a close button and Read Update action. It fades after 10 seconds, pausing while hovered, keyboard-focused or the tab is hidden. Editing and pinning do not restart its window. Clearing browser data may allow it to appear again.
