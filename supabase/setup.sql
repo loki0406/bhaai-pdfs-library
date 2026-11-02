@@ -15,6 +15,7 @@ create table if not exists public.resources (
  units text not null default '' check(char_length(units)<=100),
  description text not null default '' check(char_length(description)<=500),
  storage_path text not null unique check(storage_path ~ '^[a-f0-9-]+/[a-f0-9-]+\.(pdf|doc|docx|ppt|pptx|xls|xlsx|txt|png|jpg|jpeg|zip)$'),
+ original_filename text,
  size bigint not null check(size between 1 and 20971520),
  created_at timestamptz not null default now()
 );
