@@ -134,3 +134,9 @@ These resources are study aids for revision. Verify answers against your syllabu
 Having an issue? [Contact Bhaai ↗](mailto:srisatyalokesh80@gmail.com)
 
 </div>
+
+## Creator workspace updates
+
+The creator workspace supports light/dark themes and separates Add Material, Manage Materials and Tweet & Notes. Manage Materials uses category and subject cards, with Edit/Delete for uploads. Drag cards or use Move up/Move down, then Save Order; Discard Changes restores the last saved order. GitHub documents can be reordered alongside uploads, while their files and metadata remain managed in GitHub.
+
+Run `supabase/material-order.sql` once to enable persistent ordering. It creates a public read-only ordering table and an authenticated, admin-checked save function. Existing documents are preserved. Saved cards come first; newly added, unranked cards follow in newest-first order. Public visitors receive the saved order on refresh or within one minute.
