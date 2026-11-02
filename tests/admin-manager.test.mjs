@@ -8,7 +8,7 @@ function manager({saveError=null}={}){
  const rows=[{id:'a',title:'First',category:'General',subject:'Other Important Documents',created_at:'2026-11-02'},{id:'b',title:'Second',category:'General',subject:'Other Important Documents',created_at:'2026-11-01'}];
  const db={from:()=>({select:async()=>({data:[]})}),rpc:async(name,args)=>{calls.push({name,args});return {error:saveError};}};
  const src=readFileSync(new URL('../src/admin-manager.js',import.meta.url),'utf8').replace(/^import .*;$/gm,'').replace('export function','function')+';globalThis.manager=setupManager({db,getRows:()=>rows,esc:s=>s,status:m=>messages.push(m),requireAdmin:async()=>{},onEdit:()=>{},onDelete:()=>{}});';
- const context={db,rows,messages,subjects:[],canonicalSubject:s=>s,compareMaterials,document:{querySelector:()=>root},confirm:()=>true,fetch:async()=>({ok:true,json:async()=>[]})};vm.runInNewContext(src,context);
+ const context={db,rows,messages,materialTag:()=>'',subjects:[],canonicalSubject:s=>s,compareMaterials,document:{querySelector:()=>root},confirm:()=>true,fetch:async()=>({ok:true,json:async()=>[]})};vm.runInNewContext(src,context);
  async function click(dataset,attribute=''){await root.onclick({target:{closest:()=>({dataset,hasAttribute:a=>a===attribute})}});}
  return {root,calls,messages,load:()=>context.manager.load(),click};
 }
