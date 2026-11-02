@@ -44,3 +44,5 @@
 .section-card{display:flex;flex-direction:column;align-items:stretch}.section-card .cover-wrap{width:100%;flex-shrink:0}.section-card .cover-wrap img{display:block}.section-card .section-copy{flex:1;display:flex;flex-direction:column;align-items:flex-start}.section-card .section-arrow{margin-top:auto;padding-top:18px}
 
 #preview .dialog-top{gap:16px;align-items:flex-start}#preview-title{min-width:0;overflow-wrap:anywhere;margin:0;line-height:1.4}.preview-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}.preview-actions .download{display:inline-flex;align-items:center;min-height:38px}.preview-actions .icon{flex-shrink:0}@media(max-width:600px){#preview .dialog-top{flex-wrap:wrap}.preview-actions{width:100%;justify-content:space-between}}
+
+.download-count{font-size:11px;color:var(--muted);white-space:nowrap}
