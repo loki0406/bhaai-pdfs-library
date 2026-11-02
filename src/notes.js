@@ -1,4 +1,4 @@
-export function setupNotes({db,esc}){
+export function setupNotes({db,esc,onNavigate}){
  const $=s=>document.querySelector(s);let open=false;
  async function load(){
   if(!db){$('#notes-status').textContent='Notes will be available when the database is connected.';return;}
@@ -7,7 +7,9 @@ export function setupNotes({db,esc}){
   $('#notes-status').textContent=data.length?'':'No notes yet. Bhaai will be here soon.';
   $('#tweets').innerHTML=data.map(p=>`<article class="tweet"><div class="tweet-heading"><img src="/logo.jpeg" alt=""><div><strong>Bhaai PDFs <span class="verified">✦</span></strong><span>From Bhaai’s desk · ${esc(new Date(p.created_at).toLocaleString())}</span></div></div><p class="tweet-body">${esc(p.body)}</p></article>`).join('');
  }
- $('#notes-open').onclick=()=>{open=true;$('#notes-feed').hidden=false;$('#notes-open').hidden=true;load();$('#notes-feed').scrollIntoView({behavior:'smooth'});};
- $('#notes-back').onclick=()=>{open=false;$('#notes-feed').hidden=true;$('#notes-open').hidden=false;$('#notes-module').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});$('#notes-open').focus({preventScroll:true});};
+ function setOpen(value,{scroll=true}={}){const changed=open!==value;open=value;$('#notes-feed').hidden=!value;$('#notes-open').hidden=value;if(value&&changed)load();if(scroll){$(value?'#notes-feed':'#notes-module').scrollIntoView({behavior:'smooth',block:'start'});if(!value)$('#notes-open').focus({preventScroll:true});}}
+ $('#notes-open').onclick=()=>onNavigate?onNavigate(true):setOpen(true);
+ $('#notes-back').onclick=()=>onNavigate?onNavigate(false):setOpen(false);
  setInterval(()=>{if(open&&!document.hidden)load();},30000);
+ return {setOpen};
 }
