@@ -5,6 +5,7 @@ import {createBrowserNavigation} from './browser-navigation.js';
 import {compareMaterials} from './material-order.js';
 import {downloadFilename} from './download-filename.js';
 import {setupSupportSchedule} from './support-schedule.js';
+import {setupAnnouncements} from './announcements.js';
 import {canonicalSubject} from './subjects.js';
 import {setupLibrary} from './library-navigation.js';
 import {setupNotes} from './notes.js';
@@ -51,3 +52,4 @@ setInterval(()=>{if(!document.hidden)load().catch(()=>{});},60000);
 init().catch(()=>toast("The library could not finish loading. Please refresh."));
 
 setupSupportSchedule();
+setupAnnouncements({db});
