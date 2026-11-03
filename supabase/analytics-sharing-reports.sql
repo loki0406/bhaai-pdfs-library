@@ -52,7 +52,7 @@ declare total bigint;
 begin
  if material_id is null or char_length(material_id)>500 then raise exception 'Invalid material'; end if;
  if material_id like 'git:%' then
-  if material_id !~ '^git:[A-Za-z0-9_ /().&+-]+\\.[A-Za-z0-9]+$' or material_id like '%..%' then raise exception 'Invalid material'; end if;
+  if material_id !~ '^git:[A-Za-z0-9_ /().&+-]+[.][A-Za-z0-9]+$' or material_id like '%..%' then raise exception 'Invalid material'; end if;
  else
   if not exists(select 1 from public.resources where id::text=material_id and published=true and allow_download is distinct from false) then raise exception 'Material unavailable'; end if;
  end if;
