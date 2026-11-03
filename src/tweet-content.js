@@ -1,5 +1,5 @@
 export const escapeTweet=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export function sortPosts(posts){return [...posts].sort((a,b)=>Number(!!b.is_pinned)-Number(!!a.is_pinned)||new Date(b.created_at)-new Date(a.created_at));}
+export function sortPosts(posts){return [...posts].sort((a,b)=>Number(!!b.is_pinned)-Number(!!a.is_pinned)||Number(a.sort_order||0)-Number(b.sort_order||0)||new Date(b.created_at)-new Date(a.created_at));}
 export function announcementPost(posts,now=Date.now()){
  return [...posts].filter(p=>p.show_announcement&&now-Date.parse(p.created_at)>=0&&now-Date.parse(p.created_at)<86400000).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at))[0]||null;
 }
