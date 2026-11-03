@@ -15,7 +15,7 @@ export function setupNotes({db,esc,onNavigate,getResources=()=>[],onMaterial,isH
  function openPost(id){if(onNavigate)onNavigate(true);else setOpen(true);pendingPost=id;if(open)render();}
  $('#notes-open').onclick=()=>onNavigate?onNavigate(true):setOpen(true);
  $('#notes-back').onclick=()=>onNavigate?onNavigate(false):setOpen(false);
- $('#tweets').onclick=e=>{const b=e.target.closest('[data-note-material]');if(b){const r=getResources().find(r=>r.id===b.dataset.noteMaterial&&r.published!==false);if(r&&onMaterial)onMaterial(r.id);else load();}};
+ $('#tweets').onclick=e=>{const share=e.target.closest('[data-share-tweet]');if(share){const post=posts.find(p=>p.id===share.dataset.shareTweet);if(post){const message='📢 *Bhaai PDFs — Update*\n\n'+post.body+'\n\n❤️ Keep Learning. Keep Growing.\n— Team Bhaai PDFs';if(navigator.share)navigator.share({title:'Bhaai PDFs',text:message}).catch(()=>{});else window.open('https://wa.me/?text='+encodeURIComponent(message),'_blank','noopener');}return;}const b=e.target.closest('[data-note-material]');if(b){const r=getResources().find(r=>r.id===b.dataset.noteMaterial&&r.published!==false);if(r&&onMaterial)onMaterial(r.id);else load();}};
  setInterval(()=>{if(!document.hidden)load().catch(()=>{});},30000);
  return {setOpen,refresh:load,refreshMaterials(){if(open)render();}};
 }
