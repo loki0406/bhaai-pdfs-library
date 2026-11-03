@@ -1,0 +1,5 @@
+const CACHE='bhaai-offline-materials-v1';
+self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
+self.addEventListener('activate',event=>event.waitUntil(self.clients.claim()));
+self.addEventListener('message',event=>{const data=event.data||{};if(data.type==='CACHE_MATERIAL'&&data.url){event.waitUntil((async()=>{try{const response=await fetch(data.url,{mode:'cors'});if(!response.ok)throw Error('Download failed');const cache=await caches.open(CACHE);await cache.put(data.url,response.clone());const clients=await self.clients.matchAll({type:'window'});clients.forEach(c=>c.postMessage({type:'MATERIAL_CACHED',id:data.id,title:data.title,url:data.url,filename:data.filename}));}catch(error){const clients=await self.clients.matchAll({type:'window'});clients.forEach(c=>c.postMessage({type:'MATERIAL_CACHE_ERROR',id:data.id,message:error.message}));}})());}});
+self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith((async()=>{const cache=await caches.open(CACHE);const saved=await cache.match(event.request);if(saved)return saved;return fetch(event.request);})());});
