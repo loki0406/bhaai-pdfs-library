@@ -1,6 +1,7 @@
 -- Bhaai PDFs analytics, WhatsApp file-sharing and student issue reports.
 -- Run once in Supabase SQL Editor. Existing counters and materials are preserved.
 begin;
+alter table public.bhaai_posts add column if not exists sort_order integer not null default 0;
 
 create table if not exists public.analytics_events (
   id bigint generated always as identity primary key,
@@ -32,7 +33,7 @@ declare total bigint;
 begin
  if material_id is null or char_length(material_id)>500 then raise exception 'Invalid material'; end if;
  if material_id like 'git:%' then
-  if material_id !~ '^git:[A-Za-z0-9_ /().&+-]+\\.[A-Za-z0-9]+$' or material_id like '%..%' then raise exception 'Invalid material'; end if;
+  if material_id !~ '^git:[A-Za-z0-9_ /().&+-]+[.][A-Za-z0-9]+$' or material_id like '%..%' then raise exception 'Invalid material'; end if;
  else
   if not exists(select 1 from public.resources where id::text=material_id and published=true and allow_download is distinct from false) then raise exception 'Material unavailable'; end if;
  end if;
