@@ -157,3 +157,18 @@ header nav .theme-toggle{margin:0 2px}
  #catalogue .card .card-actions button{min-height:46px;padding:8px 5px;gap:4px;}
  #catalogue .card .card-actions button span+span{font-size:10px;}
 }
+
+
+/* Touch phones using Chrome's Desktop site: use a compact responsive shelf, not desktop-sized 3-column cards. */
+@media (max-device-width: 900px) and (pointer: coarse){
+ #catalogue.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch;}
+ #catalogue .card{width:100%;height:auto;min-height:0;aspect-ratio:auto;box-sizing:border-box;padding:15px;overflow:visible;display:flex;flex-direction:column;}
+ #catalogue .card .meta{max-height:none;min-height:0;overflow:visible;}
+ #catalogue .card .card-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-auto-flow:row;grid-auto-rows:minmax(44px,auto);gap:7px;margin-top:11px;padding-top:10px;align-items:stretch;width:100%;}
+ #catalogue .card .card-actions button{position:relative;inset:auto;float:none;transform:none;width:100%;height:auto;min-width:0;min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:7px 4px;white-space:normal;overflow:visible;line-height:1.2;font-size:10px;}
+ #catalogue .card .card-actions button span+span{font-size:10px;line-height:1.2;text-align:center;overflow-wrap:anywhere;}
+ #catalogue .card .card-actions button span:first-child{flex:0 0 auto;font-size:13px;line-height:1;}
+}
+@media (max-device-width: 420px) and (pointer: coarse){
+ #catalogue.grid{grid-template-columns:minmax(0,1fr);}
+}
