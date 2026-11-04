@@ -134,3 +134,12 @@ header nav .theme-toggle{margin:0 2px}
 #catalogue .card .card-actions button{font-size:10px;padding:7px 2px;gap:3px}
 #catalogue .card .card-actions button span+span{font-size:9px}
 }
+
+
+/* Consistent card action styling: Download remains the primary action. */
+#catalogue .card .card-actions button{box-sizing:border-box;border:1px solid var(--border);font:600 10px 'Instrument Sans',sans-serif;transition:background .2s,border-color .2s,color .2s,transform .2s;}
+#catalogue .card .card-actions .download{border:1px solid var(--orange);background:var(--orange);color:#171218;}
+#catalogue .card .card-actions .download:hover{background:#ff956f;border-color:#ff956f;transform:translateY(-1px);}
+#catalogue .card .card-actions .text-btn{background:transparent;border-color:var(--border);color:var(--text);}
+#catalogue .card .card-actions .text-btn:hover{background:#ff794914;border-color:#ff794977;color:var(--orange);transform:translateY(-1px);}
+#catalogue .card .card-actions button:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
