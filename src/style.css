@@ -143,3 +143,17 @@ header nav .theme-toggle{margin:0 2px}
 #catalogue .card .card-actions .text-btn{background:transparent;border-color:var(--border);color:var(--text);}
 #catalogue .card .card-actions .text-btn:hover{background:#ff794914;border-color:#ff794977;color:var(--orange);transform:translateY(-1px);}
 #catalogue .card .card-actions button:focus-visible{outline:2px solid var(--orange);outline-offset:2px;}
+
+
+/* Mobile card actions: two-column layout with explicit row sizing to prevent overlap. */
+@media(max-width:600px){
+ #catalogue .card .card-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-flow:row;grid-auto-rows:minmax(48px,auto);column-gap:9px;row-gap:9px;align-content:start;align-items:stretch;width:100%;}
+ #catalogue .card .card-actions button{position:relative;inset:auto;float:none;transform:none;width:100%;height:auto;min-width:0;min-height:48px;box-sizing:border-box;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:6px;padding:9px 7px;line-height:1.25;white-space:normal;overflow:visible;word-break:normal;}
+ #catalogue .card .card-actions button span+span{font-size:11px;line-height:1.25;overflow-wrap:anywhere;text-align:center;}
+ #catalogue .card .card-actions button span:first-child{flex:0 0 auto;font-size:14px;line-height:1;}
+}
+@media(max-width:370px){
+ #catalogue .card .card-actions{column-gap:7px;row-gap:8px;grid-auto-rows:minmax(46px,auto);}
+ #catalogue .card .card-actions button{min-height:46px;padding:8px 5px;gap:4px;}
+ #catalogue .card .card-actions button span+span{font-size:10px;}
+}
