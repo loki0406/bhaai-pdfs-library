@@ -4,7 +4,7 @@ export default async function handler(req,res){
  const anon=process.env.SUPABASE_ANON_KEY||process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
  const appId=process.env.ONESIGNAL_APP_ID,apiKey=process.env.ONESIGNAL_REST_API_KEY;
  if(!supabaseUrl||!anon||!appId||!apiKey)return res.status(503).json({error:'OneSignal analytics setup is incomplete. Check the Vercel environment variables.'});
- const token=(req.headers.authorization||'').replace(/^Bearer\\s+/i,'');
+ const token=(req.headers.authorization||'').replace(/^Bearer\s+/i,'');
  if(!token)return res.status(401).json({error:'Admin authentication required.'});
  try{
   const user=await fetch(supabaseUrl+'/auth/v1/user',{headers:{apikey:anon,Authorization:'Bearer '+token}});
