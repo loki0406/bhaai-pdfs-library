@@ -61,12 +61,17 @@
 
 <footer><a class="brand" href="/"><img src="/logo.jpeg" alt="">Bhaai pdfs</a><p>Made with care. Shared for free.</p><a href="mailto:srisatyalokesh80@gmail.com">Contact Bhaai ↗</a><small>Study aids for revision. Please verify answers against your syllabus. Share only materials you own or have permission to distribute.</small></footer>
 </main>
-<aside class="vertical-theme-toggle" aria-label="Colour theme">
-<button type="button" class="theme-scene theme-scene-day" data-theme-choice="light" aria-label="Light theme" aria-pressed="false" title="Light theme"><span class="scene-sun"></span><span class="scene-cloud">☁</span></button>
-<button type="button" class="theme-scene theme-scene-night" data-theme-choice="dark" aria-label="Dark theme" aria-pressed="true" title="Dark theme"><span class="scene-stars">✦ · ✧ · ✦</span><span class="scene-moon">☾</span></button>
-</aside>
+<button type="button" class="vertical-theme-toggle" data-theme-toggle aria-label="Switch to night mode" aria-pressed="false" title="Switch day and night theme">
+<span class="toggle-track" aria-hidden="true">
+<span class="toggle-day-scene"><span class="toggle-cloud"></span><span class="toggle-bird">⌁</span></span>
+<span class="toggle-night-scene"><span class="toggle-stars">✦　·　✧</span><span class="toggle-small-stars">·　✦</span><span class="toggle-cloud-night"></span></span>
+<span class="toggle-knob"><span class="toggle-knob-sun"></span><span class="toggle-knob-moon">☾</span></span>
+</span>
+</button>
 <script>
-const toggle=document.querySelector('.vertical-theme-toggle');
-toggle?.addEventListener('click',()=>{const theme=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=theme==='light'?'#faf6f0':'#0a0a0f';toggle.querySelectorAll('[data-theme-choice]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.themeChoice===theme)));try{localStorage.setItem('bhaai-theme',theme)}catch{}});
+const themeToggle=document.querySelector('[data-theme-toggle]');
+function setTheme(theme){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=theme==='light'?'#faf6f0':'#0a0a0f';if(themeToggle){themeToggle.setAttribute('aria-pressed',String(theme==='dark'));themeToggle.setAttribute('aria-label',theme==='dark'?'Switch to day mode':'Switch to night mode');themeToggle.title=theme==='dark'?'Switch to day mode':'Switch to night mode'}try{localStorage.setItem('bhaai-theme',theme)}catch{}}
+setTheme(document.documentElement.dataset.theme==='light'?'light':'dark');
+themeToggle?.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light'));
 </script>
 </body></html>
