@@ -96,7 +96,7 @@
 .vertical-theme-toggle .toggle-cloud-track img{flex:0 0 50%;width:55%;height:100%;display:block;object-fit:contain;object-position:center bottom;pointer-events:none;user-select:none;-webkit-user-drag:none;transform:scale(1.12);margin-left:-2.5%;margin-right:-2.5%}
 @keyframes bhToggleCloudMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .vertical-theme-toggle .toggle-knob{position:absolute;z-index:8;left:7px;top:7px;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff,#fdfdfd 55%,#f4f4f4);box-shadow:0 0 20px 6px #ffffff12,0 0 26px 10px #fff4be8c;transition:top .65s cubic-bezier(.65,-.1,.25,1.15),box-shadow 1.1s ease;pointer-events:none}
-.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:129px;box-shadow:0 0 18px 6px #ffffff e6,0 0 45px 15px #a0beff8c}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:129px;box-shadow:0 0 18px 6px rgba(255,255,255,.9),0 0 45px 15px #a0beff8c}
 .vertical-theme-toggle:hover{filter:brightness(1.06)}.vertical-theme-toggle:active{filter:brightness(.96)}
 .vertical-theme-toggle:focus-visible{outline:3px solid #0a66c2!important;outline-offset:4px}
 @media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:56px!important;height:164px!important;min-width:56px!important;min-height:164px!important}.vertical-theme-toggle .toggle-knob{left:6px;top:6px;width:42px;height:42px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:116px}}
