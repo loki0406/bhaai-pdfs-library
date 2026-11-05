@@ -18,7 +18,7 @@ function syncSubjectOptions(){
  if(category!=='General'&&option){const selected=select.value===generalSubject;option.remove();if(selected)select.selectedIndex=0;}
 }
 form.elements.category.onchange=syncSubjectOptions;
-function showPanel(panel){for(const b of document.querySelectorAll('[data-panel]'))b.classList.toggle('active',b.dataset.panel===panel);for(const name of ['overview','materials','manage','reports','recycle','announcements','notes','onesignal'])$('#'+name+'-panel').hidden=name!==panel;if(panel==='onesignal')loadOneSignalAnalytics().catch(e=>{const node=$('#onesignal-status');if(node)node.textContent=e.message;});if(panel==='overview')loadAdminOverview().catch(e=>status(e.message));if(panel==='reports')loadReports().catch(e=>status(e.message));if(panel==='recycle')loadRecycleBin().catch(e=>status(e.message));if(panel==='announcements')loadAnnouncements().catch(e=>status(e.message));}
+function showPanel(panel){for(const b of document.querySelectorAll('[data-panel]'))b.classList.toggle('active',b.dataset.panel===panel);for(const name of ['overview','materials','manage','reports','recycle','announcements','notes','onesignal','creator-analytics'])$('#'+name+'-panel').hidden=name!==panel;if(panel==='onesignal')loadOneSignalAnalytics().catch(e=>{const node=$('#onesignal-status');if(node)node.textContent=e.message;});if(panel==='creator-analytics')loadCreatorAnalytics().catch(e=>{const node=$('#creator-analytics-status');if(node)node.textContent=e.message;});if(panel==='overview')loadAdminOverview().catch(e=>status(e.message));if(panel==='reports')loadReports().catch(e=>status(e.message));if(panel==='recycle')loadRecycleBin().catch(e=>status(e.message));if(panel==='announcements')loadAnnouncements().catch(e=>status(e.message));}
 
 async function loadOneSignalAnalytics(){
  await requireAdmin();
@@ -43,6 +43,28 @@ async function loadOneSignalAnalytics(){
   return '<article class="onesignal-history-row"><div class="onesignal-history-copy"><strong>'+esc(title)+'</strong><p>'+esc(body)+'</p><small>'+esc(date)+'</small></div><div class="onesignal-history-stats"><span><b>'+Number(item.successful||0).toLocaleString('en-IN')+'</b><small>Delivered</small></span><span><b>'+Number(item.converted||0).toLocaleString('en-IN')+'</b><small>Clicked</small></span></div></article>';
  }).join('')||'<p class="tiny">No tweet notifications found yet. Publish a new tweet to start tracking.</p>';
  node.textContent='Live OneSignal data · Updated '+new Date().toLocaleTimeString()+(payload.subscribed===null?' · Subscriber total is unavailable from the current API credentials.':'')+(payload.truncated?' · Showing the latest 1000 notifications checked.':'');
+}
+
+
+async function loadCreatorAnalytics(){
+ await requireAdmin();
+ const node=$('#creator-analytics-status'),metrics=$('#creator-analytics-metrics'),history=$('#creator-analytics-history');
+ if(!node||!metrics||!history)return;
+ node.textContent='Loading creator click analytics…';metrics.innerHTML='';history.innerHTML='';
+ const now=new Date(),dayStart=new Date(now.getFullYear(),now.getMonth(),now.getDate()).toISOString(),monthStart=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
+ const types=['creators_note','linkedin_lokesh','linkedin_ramakrishna'];
+ const count=async(type,since)=>{let q=db.from('creator_link_analytics').select('id',{count:'exact',head:true}).eq('event_type',type);if(since)q=q.gte('created_at',since);const {count,error}=await q;if(error)throw error;return count||0;};
+ const [note,totalLokesh,totalRamakrishna,noteToday,lokeshToday,ramakrishnaToday,noteMonth,lokeshMonth,ramakrishnaMonth,recent]=await Promise.all([
+  count(types[0]),count(types[1]),count(types[2]),count(types[0],dayStart),count(types[1],dayStart),count(types[2],dayStart),count(types[0],monthStart),count(types[1],monthStart),count(types[2],monthStart),
+  db.from('creator_link_analytics').select('event_type,created_at').order('created_at',{ascending:false}).limit(25)
+ ]);
+ if(recent.error)throw recent.error;
+ const linked=totalLokesh+totalRamakrishna,today=noteToday+lokeshToday+ramakrishnaToday,month=noteMonth+lokeshMonth+ramakrishnaMonth;
+ const cards=[[note.toLocaleString('en-IN'),'Creators Note clicks','Total page opens'],[linked.toLocaleString('en-IN'),'LinkedIn clicks','Both creator profiles combined'],[totalLokesh.toLocaleString('en-IN'),"Lokesh’s LinkedIn clicks",'Profile link selections'],[totalRamakrishna.toLocaleString('en-IN'),"Ramakrishna’s LinkedIn clicks",'Profile link selections'],[today.toLocaleString('en-IN'),'Clicks today','All tracked creator links'],[month.toLocaleString('en-IN'),'Clicks this month','All tracked creator links']];
+ metrics.innerHTML=cards.map(([n,label,detail])=>'<article class="onesignal-metric"><span>'+label+'</span><strong>'+n+'</strong><small>'+detail+'</small></article>').join('');
+ const labels={creators_note:'Creators Note opened',linkedin_lokesh:'Lokesh · LinkedIn profile',linkedin_ramakrishna:'Ramakrishna · LinkedIn profile'};
+ history.innerHTML=(recent.data||[]).map(x=>'<article class="onesignal-history-row"><div class="onesignal-history-copy"><strong>'+labels[x.event_type]+'</strong><small>'+new Date(x.created_at).toLocaleString('en-IN')+'</small></div></article>').join('')||'<p class="tiny">No creator clicks recorded yet. Counts will appear after visitors click the tracked links.</p>';
+ node.textContent='Live Supabase click data · Updated '+new Date().toLocaleTimeString('en-IN');
 }
 
 const manager=setupManager({db,getRows:()=>rows,esc,status,requireAdmin,onEdit(id){showPanel('materials');handleMaterialAction({target:{closest:selector=>selector==='[data-edit]'?{dataset:{edit:id}}:null}});},onDelete(id){handleMaterialAction({target:{closest:selector=>selector==='[data-delete]'?{dataset:{delete:id}}:null}});}});
@@ -72,7 +94,7 @@ async function loadAnnouncements(){await requireAdmin();const {data,error}=await
 announcementForm.onsubmit=async e=>{e.preventDefault();if(!authorised||busy)return;const f=new FormData(announcementForm),start=new Date(f.get('starts_at')),end=new Date(f.get('ends_at'));if(!Number.isFinite(start.getTime())||!Number.isFinite(end.getTime())||end<=start){status('Choose a valid end date and time after the start.');return;}const b=announcementForm.querySelector('button[type="submit"]');b.disabled=true;try{await requireAdmin();const {data:{user}}=await db.auth.getUser();const {error}=await db.from('scheduled_announcements').insert({title:String(f.get('title')).trim(),message:String(f.get('message')).trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),created_by:user?.id||null});if(error)throw error;announcementForm.reset();await loadAnnouncements();status('Announcement scheduled. It will appear automatically during its active window.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 $('#announcement-list').onclick=async e=>{const toggle=e.target.closest('[data-toggle-announcement]'),del=e.target.closest('[data-delete-announcement]');if(!toggle&&!del)return;const b=toggle||del;b.disabled=true;try{await requireAdmin();const result=toggle?await db.from('scheduled_announcements').update({is_active:toggle.dataset.active!=='true'}).eq('id',toggle.dataset.toggleAnnouncement):await db.from('scheduled_announcements').delete().eq('id',del.dataset.deleteAnnouncement);if(result.error)throw result.error;await loadAnnouncements();status('Announcement settings updated.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 $('#admin-analytics-refresh').onclick=()=>loadAdminOverview().catch(e=>status(e.message));
-$('#onesignal-refresh').onclick=()=>loadOneSignalAnalytics().catch(e=>$('#onesignal-status').textContent=e.message);
+$('#onesignal-refresh').onclick=()=>loadOneSignalAnalytics().catch(e=>$('#onesignal-status').textContent=e.message);\n$('#creator-analytics-refresh').onclick=()=>loadCreatorAnalytics().catch(e=>$('#creator-analytics-status').textContent=e.message);
 $('#admin-reports').onclick=async e=>{const b=e.target.closest('[data-resolve-report]');if(!b||!authorised)return;b.disabled=true;try{await requireAdmin();const {error}=await db.from('material_reports').update({status:'resolved',resolved_at:new Date().toISOString()}).eq('id',b.dataset.resolveReport);if(error)throw error;await loadReports();status('Report marked resolved.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 async function loadNotes(){await noteEditor.load();}
 clear();authenticate().catch(e=>{lock();status(e.message);});
