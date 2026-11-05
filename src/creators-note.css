@@ -45,3 +45,35 @@ body{transition:background-color .45s ease,color .45s ease}
 @media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:42px!important;height:96px!important}.toggle-knob{width:34px;height:34px;left:2px;top:2px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(54px)}.toggle-knob-sun{width:24px;height:24px}}
 @media(max-width:380px){.vertical-theme-toggle{right:5px!important;width:38px!important;height:88px!important}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(48px)}}
 @media(prefers-reduced-motion:reduce){.vertical-theme-toggle,.vertical-theme-toggle *{transition:none!important;animation:none!important}}
+
+/* Bhaai PDFs — illustrated vertical day/night toggle */
+.vertical-theme-toggle{appearance:none;-webkit-appearance:none;position:fixed!important;left:auto!important;right:12px!important;top:50%!important;bottom:auto!important;transform:translateY(-50%);z-index:999;width:48px!important;height:108px!important;min-width:48px;min-height:108px;padding:0!important;margin:0!important;border:2px solid rgba(255,255,255,.7)!important;border-radius:28px!important;background:linear-gradient(180deg,#536fc0 0%,#aebce0 48%,#f5d979 100%)!important;box-shadow:0 5px 18px #0003,inset 0 0 0 1px #ffffff40!important;display:block!important;overflow:hidden!important;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:box-shadow .35s ease,filter .35s ease!important}
+.vertical-theme-toggle .toggle-track{position:absolute;inset:0;display:block;overflow:hidden;border-radius:inherit;background:transparent}
+.vertical-theme-toggle .toggle-day-scene,.vertical-theme-toggle .toggle-night-scene{position:absolute;inset:0;display:block;transition:opacity .6s ease}
+.vertical-theme-toggle .toggle-day-scene{opacity:1;background:linear-gradient(180deg,#536fc0 0%,#aebce0 48%,#f5d979 100%)}
+.vertical-theme-toggle .toggle-night-scene{opacity:0;background:linear-gradient(180deg,#10182d 0%,#263552 58%,#111a30 100%)}
+.vertical-theme-toggle .toggle-cloud,.vertical-theme-toggle .toggle-cloud:before,.vertical-theme-toggle .toggle-cloud:after{position:absolute;display:block;background:linear-gradient(180deg,#fff,#d9e0f0);border-radius:50px;content:""}
+.vertical-theme-toggle .toggle-cloud{width:35px;height:17px;bottom:9px;left:5px;filter:drop-shadow(0 2px 2px #38486b45)}
+.vertical-theme-toggle .toggle-cloud:before{width:19px;height:19px;left:6px;bottom:6px}
+.vertical-theme-toggle .toggle-cloud:after{width:23px;height:23px;right:3px;bottom:3px}
+.vertical-theme-toggle .toggle-bird{position:absolute;top:30px;right:7px;color:#fff;font-size:16px;transform:rotate(-18deg)}
+.vertical-theme-toggle .toggle-stars{position:absolute;top:8px;left:4px;right:4px;color:#f8f5ff;font-size:9px;white-space:nowrap}
+.vertical-theme-toggle .toggle-small-stars{position:absolute;top:44px;left:5px;color:#fff;font-size:10px}
+.vertical-theme-toggle .toggle-cloud-night,.vertical-theme-toggle .toggle-cloud-night:before,.vertical-theme-toggle .toggle-cloud-night:after{position:absolute;display:block;background:#aebbd7;border-radius:50%;content:""}
+.vertical-theme-toggle .toggle-cloud-night{width:20px;height:20px;right:4px;bottom:8px;box-shadow:0 0 10px #d9e4ff55}
+.vertical-theme-toggle .toggle-cloud-night:before{width:13px;height:13px;left:-7px;top:4px}
+.vertical-theme-toggle .toggle-cloud-night:after{width:12px;height:12px;right:-3px;top:-4px}
+.vertical-theme-toggle .toggle-knob{position:absolute;z-index:3;left:3px;top:3px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 32% 27%,#fffef0 0%,#ffe75b 68%,#efc83f 100%);box-shadow:0 2px 8px #6b531b55,0 0 15px #ffe45c88;transition:transform .72s cubic-bezier(.22,.8,.25,1.12),background .7s ease,box-shadow .7s ease}
+.vertical-theme-toggle .toggle-knob-sun{width:27px;height:27px;border-radius:50%;background:#ffe84e;box-shadow:0 0 12px #fff0a0;transition:opacity .35s ease,transform .6s ease}
+.vertical-theme-toggle .toggle-knob-moon{position:absolute;color:#e9efff;font-size:27px;line-height:1;opacity:0;transform:rotate(-35deg) scale(.55);transition:opacity .4s ease,transform .65s ease}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(60px);background:radial-gradient(circle at 35% 28%,#f7f8ff,#cbd5ed 70%,#9ba9c8);box-shadow:0 2px 10px #080d1d88,0 0 17px #c5d5ff88}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob-sun{opacity:0;transform:scale(.4)}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob-moon{opacity:1;transform:rotate(0) scale(1)}
+.vertical-theme-toggle[aria-pressed=true] .toggle-day-scene{opacity:0}
+.vertical-theme-toggle[aria-pressed=true] .toggle-night-scene{opacity:1}
+.vertical-theme-toggle:hover{filter:brightness(1.08)}
+.vertical-theme-toggle:active{filter:brightness(.96)}
+.vertical-theme-toggle:focus-visible{outline:3px solid #0a66c2;outline-offset:4px}
+@media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:42px!important;height:96px!important;min-width:42px;min-height:96px}.vertical-theme-toggle .toggle-knob{width:34px;height:34px;left:2px;top:2px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(54px)}.vertical-theme-toggle .toggle-knob-sun{width:24px;height:24px}}
+@media(max-width:380px){.vertical-theme-toggle{right:5px!important;width:38px!important;height:88px!important;min-width:38px;min-height:88px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(48px)}}
+@media(prefers-reduced-motion:reduce){.vertical-theme-toggle,.vertical-theme-toggle *{transition:none!important;animation:none!important}}
