@@ -24,3 +24,7 @@
 .onesignal-history-stats b{font:700 18px Syne}
 [data-theme=light] .onesignal-metric strong{color:#252022}
 @media(max-width:560px){.onesignal-history-row{align-items:flex-start;flex-direction:column}.onesignal-history-stats{width:100%;justify-content:flex-start}.onesignal-history-stats span{text-align:left}.onesignal-metric{min-height:120px}}
+
+/* Private creator click analytics */
+#creator-analytics-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin:22px 0 34px}
+#creator-analytics-history .onesignal-history-row{cursor:default}
