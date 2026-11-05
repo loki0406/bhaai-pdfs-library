@@ -65,6 +65,7 @@
 <button type="button" class="theme-scene theme-scene-night" data-theme-choice="dark" aria-label="Dark theme" aria-pressed="true" title="Dark theme"><span class="scene-stars">✦ · ✧ · ✦</span><span class="scene-moon">☾</span></button>
 </aside>
 <script>
-document.querySelectorAll("[data-theme-choice]").forEach(button=>button.addEventListener("click",()=>{const theme=button.dataset.themeChoice;document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=theme==="light"?"#faf6f0":"#0a0a0f";document.querySelectorAll("[data-theme-choice]").forEach(item=>item.setAttribute("aria-pressed",String(item.dataset.themeChoice===theme)));try{localStorage.setItem("bhaai-theme",theme)}catch{}}));
+const toggle=document.querySelector('.vertical-theme-toggle');
+toggle?.addEventListener('click',()=>{const theme=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=theme==='light'?'#faf6f0':'#0a0a0f';toggle.querySelectorAll('[data-theme-choice]').forEach(item=>item.setAttribute('aria-pressed',String(item.dataset.themeChoice===theme)));try{localStorage.setItem('bhaai-theme',theme)}catch{}});
 </script>
 </body></html>
