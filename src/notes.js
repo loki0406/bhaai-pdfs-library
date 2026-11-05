@@ -3,6 +3,19 @@ import {setupAnnouncement} from './note-announcement.js';
 export function setupNotes({db,esc,onNavigate,getResources=()=>[],onMaterial,isHome=()=>false}){
  const $=s=>document.querySelector(s);let open=false,posts=[],pendingPost=null,oneSignal=null,pushReady=false;
  const announcement=setupAnnouncement({isHome,onRead:openPost});
+ async function loadSubscriberCount(){
+  const label=$('#push-subscriber-count');if(!label)return;
+  try{
+   const response=await fetch('/api/onesignal-subscribers',{headers:{Accept:'application/json'}});
+   if(!response.ok)throw Error('Subscriber count unavailable');
+   const data=await response.json();
+   if(Number.isFinite(data.subscribed)&&data.subscribed>=0){
+    const count=new Intl.NumberFormat().format(data.subscribed);
+    label.textContent=`🔔 ${count} ${data.subscribed===1?'student is':'students are'} subscribed to notifications`;
+    label.hidden=false;
+   }
+  }catch{/* Keep the small count hidden if the service is temporarily unavailable. */}
+ }
  function pushStatus(message,enabled=false){const wrap=$('#push-optin'),button=$('#push-enable');if(!wrap||!button)return;wrap.classList.toggle('is-enabled',enabled);button.textContent=enabled?'Notifications Enabled':'Enable Notifications';button.disabled=enabled;const copy=wrap.querySelector('.push-optin-copy span');if(copy&&message)copy.textContent=message;}
  async function setupPush(){
   const appId=import.meta.env.VITE_ONESIGNAL_APP_ID;
@@ -31,6 +44,7 @@ export function setupNotes({db,esc,onNavigate,getResources=()=>[],onMaterial,isH
  $('#notes-back').onclick=()=>onNavigate?onNavigate(false):setOpen(false);
  $('#tweets').onclick=e=>{const share=e.target.closest('[data-share-tweet]');if(share){const post=posts.find(p=>p.id===share.dataset.shareTweet);if(post){const attached=(post.material_ids||[]).map(id=>getResources().find(r=>r.id===id&&r.published!==false)).filter(Boolean);const links=attached.map(r=>{try{const raw=r.source==='GitHub'?r.url:db?.storage.from('materials').getPublicUrl(r.storage_path).data.publicUrl;if(!raw)return null;const u=new URL(raw,location.origin);if(!['https:','http:'].includes(u.protocol))return null;return `📄 ${r.title}\n${u.href}`;}catch{return null;}}).filter(Boolean);const unavailable=(post.material_ids||[]).length-attached.length;const message='📢 *Bhaai PDFs — Update*\n\n'+post.body+(links.length?'\n\n🔗 *Attached materials:*\n'+links.join('\n\n'):'')+(unavailable>0?'\n\n'+unavailable+' attachment(s) are no longer available in the library.':'')+'\n\n❤️ Keep Learning. Keep Growing.\n— Team Bhaai PDFs';window.open('https://wa.me/?text='+encodeURIComponent(message),'_blank','noopener');}return;}const b=e.target.closest('[data-note-material]');if(b){const r=getResources().find(r=>r.id===b.dataset.noteMaterial&&r.published!==false);if(r&&onMaterial)onMaterial(r.id);else load();}};
  setupPush();
- setInterval(()=>{if(!document.hidden)load().catch(()=>{});},30000);
+ loadSubscriberCount();
+ setInterval(()=>{if(!document.hidden){load().catch(()=>{});loadSubscriberCount();}},300000);
  return {setOpen,openTweet(id){openPost(id);},refresh:load,refreshMaterials(){if(open)render();}};
 }
