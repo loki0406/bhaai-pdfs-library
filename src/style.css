@@ -245,3 +245,23 @@ body{transition:background-color .45s ease,color .45s ease}
 @media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:56px!important;height:164px!important;min-width:56px!important;min-height:164px!important}.vertical-theme-toggle .toggle-knob{left:6px;top:6px;width:42px;height:42px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:116px}}
 @media(max-width:380px){.vertical-theme-toggle{right:5px!important;width:50px!important;height:148px!important;min-width:50px!important;min-height:148px!important}.vertical-theme-toggle .toggle-knob{left:5px;top:5px;width:38px;height:38px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:105px}}
 @media(prefers-reduced-motion:reduce){.vertical-theme-toggle,.vertical-theme-toggle *{animation:none!important;transition:none!important}}
+
+
+/* Compact sizing override for the vertical day/night toggle */
+.vertical-theme-toggle{width:46px!important;height:132px!important;min-width:46px!important;min-height:132px!important;border-radius:26px!important}
+.vertical-theme-toggle .toggle-knob{left:6px;top:6px;width:34px;height:34px}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:92px}
+.vertical-theme-toggle .toggle-sun{width:21px;height:21px}
+.vertical-theme-toggle .toggle-moon{font-size:21px}
+.vertical-theme-toggle .toggle-shooting-stars i:after{width:28px}
+@media(max-width:700px){
+ .vertical-theme-toggle{right:7px!important;width:42px!important;height:120px!important;min-width:42px!important;min-height:120px!important}
+ .vertical-theme-toggle .toggle-knob{left:6px;top:6px;width:30px;height:30px}
+ .vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:84px}
+ .vertical-theme-toggle .toggle-sun{width:19px;height:19px}
+}
+@media(max-width:380px){
+ .vertical-theme-toggle{right:5px!important;width:38px!important;height:108px!important;min-width:38px!important;min-height:108px!important}
+ .vertical-theme-toggle .toggle-knob{left:5px;top:5px;width:28px;height:28px}
+ .vertical-theme-toggle[aria-pressed=true] .toggle-knob{top:75px}
+}
