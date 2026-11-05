@@ -15,7 +15,7 @@ export default async function handler(req,res){
   if(typeof body!=='string'||!body.trim()||body.length>2000||typeof postId!=='string'||!postId)return res.status(400).json({error:'Invalid published tweet.'});
   const siteUrl=process.env.PUBLIC_SITE_URL||'https://bhaai-pdfs-library.vercel.app/';
   const clickUrl=new URL('/?openTweet='+encodeURIComponent(postId)+'#notes-module',siteUrl).toString();
-  const push=await fetch('https://api.onesignal.com/notifications?c=push',{method:'POST',headers:{Authorization:'Key '+apiKey,'Content-Type':'application/json'},body:JSON.stringify({app_id:appId,included_segments:['Subscribed Users'],headings:{en:'New Bhaai PDFs Update'},contents:{en:body.trim().slice(0,180)},url:clickUrl,data:{postId},name:'Bhaai Tweet: '+postId})});
+  const push=await fetch('https://api.onesignal.com/notifications?c=push',{method:'POST',headers:{Authorization:'Key '+apiKey,'Content-Type':'application/json'},body:JSON.stringify({app_id:appId,included_segments:['All'],headings:{en:'New Bhaai PDFs Update'},contents:{en:body.trim().slice(0,180)},url:clickUrl,data:{postId},name:'Bhaai Tweet: '+postId})});
   const result=await push.json().catch(()=>({}));
   if(!push.ok){
    const details=Array.isArray(result.errors)?result.errors.map(item=>typeof item==='string'?item:JSON.stringify(item)).join('; '):result.message;
