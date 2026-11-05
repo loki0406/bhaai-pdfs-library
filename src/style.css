@@ -321,3 +321,18 @@ body{transition:background-color .45s ease,color .45s ease}
  .horizontal-theme-toggle .toggle-knob{left:3px!important;top:3px!important;width:22px!important;height:22px!important}
  .horizontal-theme-toggle[aria-pressed=true] .toggle-knob{left:51px!important;top:3px!important}
 }
+
+
+/* Bhaai Tweet & Notes push notification subscription banner */
+.push-optin{display:flex;align-items:center;gap:15px;margin:0 0 22px;padding:16px 18px;border:1px solid #ff794936;border-radius:16px;background:linear-gradient(110deg,#ff794911,#68d6b908);box-shadow:0 12px 34px #0002}
+.push-optin-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;background:#ff79491c;color:#ff9a74;font-size:23px}
+.push-optin-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.push-optin-copy strong{font:700 14px Syne,sans-serif;color:var(--ink,#f0ede8)}
+.push-optin-copy span{font-size:12px;line-height:1.5;color:var(--muted)}
+.push-enable{display:inline-flex;align-items:center;justify-content:center;gap:10px;flex:0 0 auto;min-height:42px;padding:0 16px;border:1px solid #ff79496b;border-radius:10px;background:#ff79491b;color:#ff9a74;font-size:12px;font-weight:700;transition:background .2s,border-color .2s}
+.push-enable:hover{background:#ff79492c;border-color:#ff7949}
+.push-enable:disabled{cursor:default;opacity:.85}
+.push-optin.is-enabled{border-color:#68d6b94a;background:linear-gradient(110deg,#68d6b911,#68d6b906)}
+.push-optin.is-enabled .push-optin-icon{background:#68d6b91a;color:#68d6b9}
+.push-optin.is-enabled .push-enable{border-color:#68d6b955;background:#68d6b914;color:#68d6b9}
+@media(max-width:620px){.push-optin{align-items:flex-start;flex-wrap:wrap;gap:11px;padding:14px}.push-optin-icon{width:38px;height:38px;flex-basis:38px}.push-optin-copy{padding-top:2px}.push-enable{width:100%;min-height:40px}}
