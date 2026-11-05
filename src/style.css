@@ -172,3 +172,13 @@ header nav .theme-toggle{margin:0 2px}
 @media (max-device-width: 420px) and (pointer: coarse){
  #catalogue.grid{grid-template-columns:minmax(0,1fr);}
 }
+
+
+/* Minimal inline creator credits in the existing footer. */
+footer .creator-credit{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:2px 0 4px;font-size:12px;line-height:1.6;color:var(--muted);}
+footer .creator-credit .creator-label{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:700;}
+footer .creator-credit a{color:inherit;font-weight:600;transition:color .2s ease;}
+footer .creator-credit a span{color:#0a66c2;font-size:11px;}
+footer .creator-credit a:hover{color:var(--orange);}
+footer .creator-credit .creator-separator{color:var(--orange);}
+@media(max-width:600px){footer .creator-credit{justify-content:flex-start;gap:7px 9px;font-size:11px;}footer .creator-credit .creator-label{width:100%;}}
