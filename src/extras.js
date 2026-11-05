@@ -3,7 +3,7 @@ export function setupExtras({getResources,showResource,openAdmin}) {
  const $=selector=>document.querySelector(selector);
  function applyTheme(theme){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#faf6f0':'#0a0a0f';document.querySelectorAll('[data-theme-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.themeChoice===theme)));try{localStorage.setItem('bhaai-theme',theme);}catch{/* Private storage may be unavailable. */}}
  applyTheme(document.documentElement.dataset.theme==='light'?'light':'dark');
- document.querySelectorAll('[data-theme-choice]').forEach(button=>button.addEventListener('click',()=>applyTheme(button.dataset.themeChoice)));
+ const themeToggle=document.querySelector('.vertical-theme-toggle');themeToggle?.addEventListener('click',()=>applyTheme(document.documentElement.dataset.theme==='light'?'dark':'light'));
  const panel=$('#bhaai-chat'),launcher=$('#chat-launcher'),input=$('#chat-input'),log=$('#chat-log');
  function close(){panel.hidden=true;launcher.setAttribute('aria-expanded','false');launcher.focus();}
  launcher.onclick=()=>{panel.hidden=!panel.hidden;launcher.setAttribute('aria-expanded',String(!panel.hidden));if(!panel.hidden)input.focus();};$('#chat-close').onclick=close;
