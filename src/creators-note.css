@@ -15,3 +15,33 @@ body{transition:background-color .45s ease,color .45s ease}
 @media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:38px!important;height:78px!important;padding:2px!important}.vertical-theme-toggle .scene-sun{width:21px;height:21px}.vertical-theme-toggle .scene-cloud{font-size:19px}.vertical-theme-toggle .scene-moon{font-size:24px}}
 @media(max-width:380px){.vertical-theme-toggle{right:5px!important;width:34px!important;height:70px!important}}
 @media(prefers-reduced-motion:reduce){.vertical-theme-toggle,.vertical-theme-toggle *,:root,body{transition:none!important;animation:none!important}}
+
+/* Custom vertical day/night switch inspired by illustrated sky toggles. */
+.vertical-theme-toggle{position:fixed!important;left:auto!important;right:12px!important;top:50%!important;transform:translateY(-50%);z-index:30;width:48px!important;height:108px!important;padding:0!important;border:0!important;border-radius:28px!important;background:transparent!important;box-shadow:0 5px 18px #0003!important;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;overflow:visible!important;transition:transform .25s ease,filter .3s ease!important}
+.toggle-track{position:absolute;inset:0;display:block;overflow:hidden;border:2px solid #ffffff9c;border-radius:28px;background:linear-gradient(180deg,#637dc6 0%,#b8c4e1 48%,#f4d77d 100%);box-shadow:inset 0 0 0 1px #ffffff40;transition:background 1s ease,box-shadow .4s ease}
+.toggle-day-scene,.toggle-night-scene{position:absolute;inset:0;display:block;transition:opacity .65s ease}
+.toggle-day-scene{opacity:1;background:linear-gradient(180deg,#536fc0 0%,#aebce0 48%,#f5d979 100%)}
+.toggle-night-scene{opacity:0;background:linear-gradient(180deg,#10182d 0%,#263552 58%,#111a30 100%)}
+.toggle-cloud,.toggle-cloud:before,.toggle-cloud:after{position:absolute;display:block;background:linear-gradient(180deg,#fff,#d9e0f0);border-radius:50px;content:""}
+.toggle-cloud{width:35px;height:17px;bottom:9px;left:5px;filter:drop-shadow(0 2px 2px #38486b45)}
+.toggle-cloud:before{width:19px;height:19px;left:6px;bottom:6px}.toggle-cloud:after{width:23px;height:23px;right:3px;bottom:3px}
+.toggle-bird{position:absolute;top:30px;right:7px;color:#fff;font-size:16px;transform:rotate(-18deg)}
+.toggle-night-scene .toggle-stars{position:absolute;top:8px;left:4px;right:4px;color:#f8f5ff;font-size:9px;white-space:nowrap}
+.toggle-small-stars{position:absolute;top:44px;left:5px;color:#fff;font-size:10px}
+.toggle-cloud-night,.toggle-cloud-night:before,.toggle-cloud-night:after{position:absolute;display:block;background:#aebbd7;border-radius:50%;content:""}
+.toggle-cloud-night{width:20px;height:20px;right:4px;bottom:8px;box-shadow:0 0 10px #d9e4ff55}
+.toggle-cloud-night:before{width:13px;height:13px;left:-7px;top:4px}.toggle-cloud-night:after{width:12px;height:12px;right:-3px;top:-4px}
+.toggle-knob{position:absolute;z-index:3;left:3px;top:3px;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 32% 27%,#fffef0 0%,#ffe75b 68%,#efc83f 100%);box-shadow:0 2px 8px #6b531b55,0 0 15px #ffe45c88;transition:transform .72s cubic-bezier(.22,.8,.25,1.12),background .7s ease,box-shadow .7s ease}
+.toggle-knob-sun{width:27px;height:27px;border-radius:50%;background:#ffe84e;box-shadow:0 0 12px #fff0a0;transition:opacity .35s ease,transform .6s ease}
+.toggle-knob-moon{position:absolute;color:#e9efff;font-size:27px;line-height:1;opacity:0;transform:rotate(-35deg) scale(.55);transition:opacity .4s ease,transform .65s ease}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(60px);background:radial-gradient(circle at 35% 28%,#f7f8ff,#cbd5ed 70%,#9ba9c8);box-shadow:0 2px 10px #080d1d88,0 0 17px #c5d5ff88}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob-sun{opacity:0;transform:scale(.4)}
+.vertical-theme-toggle[aria-pressed=true] .toggle-knob-moon{opacity:1;transform:rotate(0) scale(1)}
+.vertical-theme-toggle[aria-pressed=true] .toggle-day-scene{opacity:0}
+.vertical-theme-toggle[aria-pressed=true] .toggle-night-scene{opacity:1}
+.vertical-theme-toggle:hover{filter:brightness(1.08)}
+.vertical-theme-toggle:active{transform:translateY(-50%) scale(.94)}
+.vertical-theme-toggle:focus-visible{outline:3px solid #0a66c2;outline-offset:4px}
+@media(max-width:700px){.vertical-theme-toggle{right:7px!important;width:42px!important;height:96px!important}.toggle-knob{width:34px;height:34px;left:2px;top:2px}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(54px)}.toggle-knob-sun{width:24px;height:24px}}
+@media(max-width:380px){.vertical-theme-toggle{right:5px!important;width:38px!important;height:88px!important}.vertical-theme-toggle[aria-pressed=true] .toggle-knob{transform:translateY(48px)}}
+@media(prefers-reduced-motion:reduce){.vertical-theme-toggle,.vertical-theme-toggle *{transition:none!important;animation:none!important}}
