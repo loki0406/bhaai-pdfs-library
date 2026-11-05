@@ -174,11 +174,12 @@ header nav .theme-toggle{margin:0 2px}
 }
 
 
-/* Minimal inline creator credits in the existing footer. */
-footer .creator-credit{width:100%;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;padding:2px 0 4px;font-size:12px;line-height:1.6;color:var(--muted);}
-footer .creator-credit .creator-label{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);font-weight:700;}
-footer .creator-credit a{color:inherit;font-weight:600;transition:color .2s ease;}
-footer .creator-credit a span{color:#0a66c2;font-size:11px;}
-footer .creator-credit a:hover{color:var(--orange);}
-footer .creator-credit .creator-separator{color:var(--orange);}
-@media(max-width:600px){footer .creator-credit{justify-content:flex-start;gap:7px 9px;font-size:11px;}footer .creator-credit .creator-label{width:100%;}}
+
+/* Compact LinkedIn profile chips inside the existing contact card. */
+.contact-card .creator-links{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:18px;}
+.contact-card .creator-link{display:inline-flex;align-items:center;gap:9px;min-height:42px;padding:8px 13px;border:1px solid var(--border);border-radius:999px;background:transparent;color:var(--ink);font-size:12px;font-weight:600;line-height:1.25;text-decoration:none;transition:border-color .2s ease,background .2s ease,transform .2s ease,color .2s ease;}
+.contact-card .creator-link svg{width:17px;height:17px;flex:0 0 17px;fill:#0a66c2;}
+.contact-card .creator-link .creator-link-arrow{color:var(--orange);font-size:13px;}
+.contact-card .creator-link:hover{border-color:#0a66c2;background:#0a66c20b;color:var(--orange);transform:translateY(-1px);}
+.contact-card .creator-link:focus-visible{outline:2px solid #0a66c2;outline-offset:3px;}
+@media(max-width:600px){.contact-card .creator-links{gap:8px;margin-top:15px}.contact-card .creator-link{min-height:40px;padding:8px 11px;font-size:11px;}}
