@@ -18,7 +18,33 @@ function syncSubjectOptions(){
  if(category!=='General'&&option){const selected=select.value===generalSubject;option.remove();if(selected)select.selectedIndex=0;}
 }
 form.elements.category.onchange=syncSubjectOptions;
-function showPanel(panel){for(const b of document.querySelectorAll('[data-panel]'))b.classList.toggle('active',b.dataset.panel===panel);for(const name of ['overview','materials','manage','reports','recycle','announcements','notes'])$('#'+name+'-panel').hidden=name!==panel;if(panel==='overview')loadAdminOverview().catch(e=>status(e.message));if(panel==='reports')loadReports().catch(e=>status(e.message));if(panel==='recycle')loadRecycleBin().catch(e=>status(e.message));if(panel==='announcements')loadAnnouncements().catch(e=>status(e.message));}
+function showPanel(panel){for(const b of document.querySelectorAll('[data-panel]'))b.classList.toggle('active',b.dataset.panel===panel);for(const name of ['overview','materials','manage','reports','recycle','announcements','notes','onesignal'])$('#'+name+'-panel').hidden=name!==panel;if(panel==='onesignal')loadOneSignalAnalytics().catch(e=>{const node=$('#onesignal-status');if(node)node.textContent=e.message;});if(panel==='overview')loadAdminOverview().catch(e=>status(e.message));if(panel==='reports')loadReports().catch(e=>status(e.message));if(panel==='recycle')loadRecycleBin().catch(e=>status(e.message));if(panel==='announcements')loadAnnouncements().catch(e=>status(e.message));}
+
+async function loadOneSignalAnalytics(){
+ await requireAdmin();
+ const node=$('#onesignal-status'),metrics=$('#onesignal-metrics'),history=$('#onesignal-history');
+ if(!node||!metrics||!history)return;
+ node.textContent='Fetching secure OneSignal analytics…';
+ metrics.innerHTML='';history.innerHTML='';
+ const {data:{session}}=await db.auth.getSession();
+ if(!session?.access_token)throw Error('Your admin session expired. Sign in again.');
+ const response=await fetch('/api/onesignal-analytics',{headers:{Authorization:'Bearer '+session.access_token}});
+ const payload=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(payload.error||'Could not load OneSignal analytics.');
+ const items=Array.isArray(payload.notifications)?payload.notifications:[];
+ const sends=items.length,delivered=items.reduce((n,x)=>n+Number(x.successful||0),0),clicks=items.reduce((n,x)=>n+Number(x.converted||0),0);
+ const rate=delivered?((clicks/delivered)*100):0;
+ const cards=[[sends,'Tweet notifications sent','Published Bhaai tweets'],[delivered.toLocaleString('en-IN'),'Successful deliveries','Devices reached across tweet pushes'],[payload.subscribed===null?'—':Number(payload.subscribed||0).toLocaleString('en-IN'),'Subscribed users','Current messageable subscribers'],[clicks.toLocaleString('en-IN'),'Notification clicks','Total taps on tweet notifications'],[rate.toFixed(1)+'%','Click-through rate','Clicks ÷ successful deliveries']];
+ metrics.innerHTML=cards.map(([n,label,detail])=>'<article class="onesignal-metric"><span>'+label+'</span><strong>'+n+'</strong><small>'+detail+'</small></article>').join('');
+ history.innerHTML=items.map(item=>{
+  const title=String(item.headings?.en||'BHAAI PDFS · New Update');
+  const body=String(item.contents?.en||'');
+  const date=item.queued_at?new Date(Number(item.queued_at)*1000).toLocaleString('en-IN'):'Date unavailable';
+  return '<article class="onesignal-history-row"><div class="onesignal-history-copy"><strong>'+esc(title)+'</strong><p>'+esc(body)+'</p><small>'+esc(date)+'</small></div><div class="onesignal-history-stats"><span><b>'+Number(item.successful||0).toLocaleString('en-IN')+'</b><small>Delivered</small></span><span><b>'+Number(item.converted||0).toLocaleString('en-IN')+'</b><small>Clicked</small></span></div></article>';
+ }).join('')||'<p class="tiny">No tweet notifications found yet. Publish a new tweet to start tracking.</p>';
+ node.textContent='Live OneSignal data · Updated '+new Date().toLocaleTimeString()+(payload.subscribed===null?' · Subscriber total is unavailable from the current API credentials.':'')+(payload.truncated?' · Showing the latest 1000 notifications checked.':'');
+}
+
 const manager=setupManager({db,getRows:()=>rows,esc,status,requireAdmin,onEdit(id){showPanel('materials');handleMaterialAction({target:{closest:selector=>selector==='[data-edit]'?{dataset:{edit:id}}:null}});},onDelete(id){handleMaterialAction({target:{closest:selector=>selector==='[data-delete]'?{dataset:{delete:id}}:null}});}});
 function applyAdminTheme(theme){document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;document.querySelector('meta[name="theme-color"]').content=theme==='light'?'#faf6f0':'#0a0a0f';for(const b of document.querySelectorAll('[data-theme-choice]'))b.setAttribute('aria-pressed',String(b.dataset.themeChoice===theme));try{localStorage.setItem('bhaai-theme',theme);}catch{}}
 applyAdminTheme(document.documentElement.dataset.theme==='light'?'light':'dark');
@@ -46,6 +72,7 @@ async function loadAnnouncements(){await requireAdmin();const {data,error}=await
 announcementForm.onsubmit=async e=>{e.preventDefault();if(!authorised||busy)return;const f=new FormData(announcementForm),start=new Date(f.get('starts_at')),end=new Date(f.get('ends_at'));if(!Number.isFinite(start.getTime())||!Number.isFinite(end.getTime())||end<=start){status('Choose a valid end date and time after the start.');return;}const b=announcementForm.querySelector('button[type="submit"]');b.disabled=true;try{await requireAdmin();const {data:{user}}=await db.auth.getUser();const {error}=await db.from('scheduled_announcements').insert({title:String(f.get('title')).trim(),message:String(f.get('message')).trim(),starts_at:start.toISOString(),ends_at:end.toISOString(),created_by:user?.id||null});if(error)throw error;announcementForm.reset();await loadAnnouncements();status('Announcement scheduled. It will appear automatically during its active window.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 $('#announcement-list').onclick=async e=>{const toggle=e.target.closest('[data-toggle-announcement]'),del=e.target.closest('[data-delete-announcement]');if(!toggle&&!del)return;const b=toggle||del;b.disabled=true;try{await requireAdmin();const result=toggle?await db.from('scheduled_announcements').update({is_active:toggle.dataset.active!=='true'}).eq('id',toggle.dataset.toggleAnnouncement):await db.from('scheduled_announcements').delete().eq('id',del.dataset.deleteAnnouncement);if(result.error)throw result.error;await loadAnnouncements();status('Announcement settings updated.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 $('#admin-analytics-refresh').onclick=()=>loadAdminOverview().catch(e=>status(e.message));
+$('#onesignal-refresh').onclick=()=>loadOneSignalAnalytics().catch(e=>$('#onesignal-status').textContent=e.message);
 $('#admin-reports').onclick=async e=>{const b=e.target.closest('[data-resolve-report]');if(!b||!authorised)return;b.disabled=true;try{await requireAdmin();const {error}=await db.from('material_reports').update({status:'resolved',resolved_at:new Date().toISOString()}).eq('id',b.dataset.resolveReport);if(error)throw error;await loadReports();status('Report marked resolved.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 async function loadNotes(){await noteEditor.load();}
 clear();authenticate().catch(e=>{lock();status(e.message);});
