@@ -378,3 +378,21 @@ body{transition:background-color .45s ease,color .45s ease}
 .preview-download-hint{display:inline-flex;align-items:center;justify-content:center;max-width:190px;padding:8px 11px;border:1px solid #ff79496b;border-radius:9px;background:linear-gradient(110deg,#ff794925,#ffc26c18);color:#ffad88;font-size:11px;font-weight:700;line-height:1.35;text-align:center;box-shadow:0 4px 16px #ff794912}
 @media(max-width:600px){.preview-download-hint{order:3;flex:1 0 100%;max-width:none;justify-content:flex-start;padding:8px 10px}}
 :root[data-theme=light] .preview-download-hint{color:#913b1c;background:linear-gradient(110deg,#fff0e5,#fff7e9);border-color:#d9784c}
+
+
+/* Compact PDF preview header on phones and narrow tablets */
+@media(max-width:760px){
+  #preview{width:calc(100% - 24px);max-width:none;padding:18px}
+  #preview .dialog-top{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+  #preview-title{width:100%;font-size:clamp(19px,4vw,25px);line-height:1.25;overflow-wrap:anywhere}
+  .preview-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:9px;width:100%}
+  .preview-actions .download{order:0;min-width:0;justify-content:center;padding:9px 12px;font-size:13px;white-space:normal;text-align:center}
+  .preview-actions .icon{order:1;justify-self:end}
+  .preview-actions .preview-download-hint{order:2;grid-column:1/-1;justify-self:start;width:auto;max-width:100%;min-height:0;padding:7px 10px;font-size:12px;line-height:1.35;text-align:left}
+  #pdf-frame{height:62vh}
+}
+@media(max-width:380px){
+  #preview{padding:14px}
+  .preview-actions .download{font-size:12px;padding:8px 9px}
+  .preview-actions .preview-download-hint{font-size:11px}
+}
