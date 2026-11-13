@@ -28,3 +28,30 @@
 /* Private creator click analytics */
 #creator-analytics-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:14px;margin:22px 0 34px}
 #creator-analytics-history .onesignal-history-row{cursor:default}
+
+/* PDF Updates admin control room */
+.pdf-admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 18px;padding:6px;border:1px solid var(--border);border-radius:16px;background:var(--panel)}
+.pdf-admin-tabs button{border:0;border-radius:11px;padding:11px 16px;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
+.pdf-admin-tabs button.active{background:#ff79491e;color:#ff9a74;box-shadow:inset 0 0 0 1px #ff794944}
+.pdf-admin-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+.pdf-admin-overview-card{display:grid;gap:12px;align-content:start;padding:22px;border:1px solid var(--border);border-radius:20px;background:var(--panel)}
+.pdf-admin-overview-card>span{font:800 17px Syne}.pdf-admin-overview-card p{margin:0;color:var(--muted);line-height:1.6}
+.pdf-admin-toolbar,.pdf-admin-bulk{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.pdf-admin-toolbar input{flex:1;min-width:220px}.pdf-admin-toolbar select,.pdf-admin-bulk select{min-width:145px}
+.pdf-admin-bulk{align-items:center;padding:13px;border:1px solid var(--border);border-radius:15px;background:var(--panel)}
+.pdf-admin-list{display:grid;gap:13px;margin-top:14px}
+.pdf-admin-card,.pdf-admin-comment,.pdf-admin-interaction{padding:19px;border:1px solid var(--border);border-radius:18px;background:var(--panel)}
+.pdf-admin-card-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.pdf-admin-card-top time,.pdf-admin-interaction time{margin-left:auto;color:var(--muted);font-size:11px}
+.pdf-admin-select{margin:0!important}.pdf-admin-select input{width:17px;height:17px;accent-color:var(--orange)}
+.pdf-admin-published{background:#1d9c6818;color:#65d6a3}.pdf-admin-hidden{background:#ff79491b;color:#ffad8b}
+.pdf-admin-card-main{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.pdf-admin-card-main h3{margin:0 0 7px;font:800 19px Syne}.pdf-admin-card-main p,.pdf-admin-comment p{margin:0 0 10px;color:var(--muted);overflow-wrap:anywhere}
+.pdf-admin-engagement{display:flex;gap:16px;color:var(--muted);font-size:12px}
+.pdf-admin-card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.pdf-admin-edit{margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.pdf-admin-interaction{display:flex;align-items:center;justify-content:space-between;gap:15px}.pdf-admin-interaction>div{display:grid;gap:6px;min-width:0}.pdf-admin-interaction small,.pdf-admin-comment small{color:var(--muted);font-size:11px}
+.pdf-admin-comment>strong{display:block;margin-bottom:7px}.pdf-admin-comment .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pdf-admin-empty{padding:28px;border:1px dashed var(--border);border-radius:16px;color:var(--muted);text-align:center}
+[data-theme=light] .pdf-admin-tabs button.active{color:#9a3d1d}
+@media(max-width:650px){.pdf-admin-overview{grid-template-columns:1fr}.pdf-admin-card-main{flex-direction:column}.pdf-admin-card-actions{justify-content:flex-start}.pdf-admin-interaction{align-items:flex-start;flex-direction:column}.pdf-admin-card{padding:16px}.pdf-admin-toolbar>*{width:100%;min-width:0!important}.pdf-admin-bulk>*{flex:1;min-width:0}.pdf-admin-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.pdf-admin-tabs button:last-child{grid-column:1/-1}}
