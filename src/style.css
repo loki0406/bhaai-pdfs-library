@@ -396,3 +396,11 @@ body{transition:background-color .45s ease,color .45s ease}
   .preview-actions .download{font-size:12px;padding:8px 9px}
   .preview-actions .preview-download-hint{font-size:11px}
 }
+
+/* Accessible loading states for the study shelf */
+.skeleton-card{border:1px solid var(--border);border-radius:20px;padding:25px;background:linear-gradient(135deg,#ffffff07,#ffffff02);min-height:300px;display:flex;flex-direction:column;gap:15px;overflow:hidden}
+.skeleton-line{position:relative;overflow:hidden;border-radius:8px;background:#ffffff0d}
+.skeleton-line:after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,#ffffff12,transparent);animation:bhaai-shimmer 1.35s infinite}
+.skeleton-icon{width:44px;height:50px;border-radius:9px}.skeleton-title{height:19px;width:78%;margin-top:8px}.skeleton-short{height:12px;width:48%}.skeleton-meta{height:36px;width:100%;margin-top:auto}.skeleton-actions{height:38px;width:88%;margin-top:8px}
+@keyframes bhaai-shimmer{100%{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.skeleton-line:after{animation:none;transform:none;background:#ffffff08}}
