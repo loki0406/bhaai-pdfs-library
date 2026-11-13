@@ -1,7 +1,7 @@
 import {createClient} from '@supabase/supabase-js';
 const url=import.meta.env.VITE_SUPABASE_URL||import.meta.env.NEXT_PUBLIC_SUPABASE_URL,key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY||import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-const db=url&&key?createClient(url,key):null,$=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let visitor=localStorage.getItem('bhaai-pdf-visitor');if(!visitor){visitor=crypto.randomUUID()+crypto.randomUUID();localStorage.setItem('bhaai-pdf-visitor',visitor);}
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let visitor=localStorage.getItem('bhaai-pdf-visitor');if(!visitor){visitor=crypto.randomUUID()+crypto.randomUUID();localStorage.setItem('bhaai-pdf-visitor',visitor);}const db=url&&key?createClient(url,key,{global:{headers:{'x-bhaai-visitor':visitor}}}):null;
 const date=v=>new Date(v).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Kolkata'});
 async function load(){if(!db){$('#pdf-updates').innerHTML='<p class="empty">Updates are temporarily unavailable.</p>';return;}
  const {data:updates,error}=await db.from('pdf_updates').select('*').eq('is_visible',true).order('uploaded_at',{ascending:false});
