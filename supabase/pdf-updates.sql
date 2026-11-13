@@ -47,6 +47,8 @@ drop policy if exists "Public read visible comments" on public.pdf_update_commen
 create policy "Public read visible comments" on public.pdf_update_comments for select to anon,authenticated using (is_visible or public.is_library_admin());
 drop policy if exists "Public add comments" on public.pdf_update_comments;
 create policy "Public add comments" on public.pdf_update_comments for insert to anon,authenticated with check (char_length(visitor_id) between 20 and 80 and char_length(display_name) between 1 and 40 and char_length(body) between 1 and 1000);
+drop policy if exists "Admin manage likes" on public.pdf_update_likes;
+create policy "Admin manage likes" on public.pdf_update_likes for all to authenticated using (public.is_library_admin()) with check (public.is_library_admin());
 drop policy if exists "Admin manage comments" on public.pdf_update_comments;
 create policy "Admin manage comments" on public.pdf_update_comments for all to authenticated using (public.is_library_admin()) with check (public.is_library_admin());
 grant select on public.pdf_updates,public.pdf_update_likes,public.pdf_update_comments to anon,authenticated;
