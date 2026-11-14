@@ -1,7 +1,7 @@
 create table if not exists public.pdf_update_analytics (
  id uuid primary key default gen_random_uuid(),
  event_type text not null check(event_type in ('page_view','update_click')),
- update_id uuid references public.pdf_updates(id) on delete set null,
+ update_id uuid references public.pdf_updates(id) on delete cascade,
  visitor_id text not null check(char_length(visitor_id) between 20 and 80),
  session_id text not null check(char_length(session_id) between 20 and 80),
  created_at timestamptz not null default now(),
