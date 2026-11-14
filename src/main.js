@@ -46,7 +46,29 @@ $('#admin-open').onclick=openAdmin;
 
 setupExtras({getResources:()=>resources,showResource(id){const r=resources.find(r=>r.id===id);if(!r)return;routes.go({category:r.category,subject:r.subject,notes:false,preview:''});$('#library').scrollIntoView({behavior:'smooth'});},openAdmin});
 document.querySelectorAll('a[href="#library"],a[href="#notes-module"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();if(link.hash==='#library'){routes.go({category:'',subject:'',notes:false,preview:''});$('#library').scrollIntoView({behavior:'smooth'});}else{$('#notes-module').scrollIntoView({behavior:'smooth'});}}));
-async function init(){await load();routes.sync();await notes.refresh();const params=new URLSearchParams(location.search);const sharedCard=params.get('card');if(sharedCard){const r=resources.find(item=>String(item.id)===sharedCard);if(r){routes.go({category:r.category,subject:r.subject,notes:false,preview:''});const card=document.getElementById('resource-'+CSS.escape(String(r.id)));if(card){card.classList.add('shared-card-highlight');card.insertAdjacentHTML('afterbegin','<span class="shared-card-badge">SHARED CARD</span>');requestAnimationFrame(()=>card.scrollIntoView({behavior:'smooth',block:'center'}));setTimeout(()=>{card.classList.remove('shared-card-highlight');card.querySelector('.shared-card-badge')?.remove();},9000);}}else toast('This material is no longer available in the library.');}const pushTweet=params.get('openTweet');if(pushTweet){routes.go({notes:true,preview:''});notes.openTweet(pushTweet);}const shared=params.get('resource');if(shared&&!routes.view.category){const r=resources.find(r=>r.id===shared);if(r){routes.go({category:r.category,subject:r.subject,notes:false,preview:''});$('#library').scrollIntoView();if(r.allow_preview!==false&&(r.source==='GitHub'?r.url:r.storage_path).toLowerCase().endsWith('.pdf'))preview(r);}else toast('This material is no longer available. Explore the library below.');}
+let sharedCardHighlightTimer=0;
+async function revealSharedCard(resource){
+  const run=(window.__bhaaiSharedCardRun||0)+1;window.__bhaaiSharedCardRun=run;
+  clearTimeout(sharedCardHighlightTimer);
+  document.querySelectorAll('.shared-card-highlight').forEach(el=>{el.classList.remove('shared-card-highlight');el.querySelector('.shared-card-badge')?.remove();});
+  routes.go({category:resource.category,subject:resource.subject,notes:false,preview:''});
+  // Let route rendering and layout settle before locating the target card.
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  let card=document.getElementById('resource-'+String(resource.id));
+  for(let attempt=0;!card&&attempt<30;attempt++){
+    await new Promise(resolve=>setTimeout(resolve,100));
+    if(run!==window.__bhaaiSharedCardRun)return;
+    card=document.getElementById('resource-'+String(resource.id));
+  }
+  if(run!==window.__bhaaiSharedCardRun)return;
+  if(!card){toast('The shared material could not be displayed. Please refresh the library.');return;}
+  card.classList.add('shared-card-highlight');
+  card.querySelector('.shared-card-badge')?.remove();
+  const badge=document.createElement('span');badge.className='shared-card-badge';badge.textContent='SHARED CARD';card.prepend(badge);
+  requestAnimationFrame(()=>{if(run===window.__bhaaiSharedCardRun)card.scrollIntoView({behavior:'smooth',block:'center'});});
+  sharedCardHighlightTimer=setTimeout(()=>{if(run!==window.__bhaaiSharedCardRun)return;card.classList.remove('shared-card-highlight');badge.remove();},9000);
+}
+async function init(){await load();routes.sync();await notes.refresh();const params=new URLSearchParams(location.search);const sharedCard=params.get('card');if(sharedCard){const r=resources.find(item=>String(item.id)===sharedCard);if(r)await revealSharedCard(r);else toast('This material is no longer available in the library.');}const pushTweet=params.get('openTweet');if(pushTweet){routes.go({notes:true,preview:''});notes.openTweet(pushTweet);}const shared=params.get('resource');if(shared&&!routes.view.category){const r=resources.find(r=>r.id===shared);if(r){routes.go({category:r.category,subject:r.subject,notes:false,preview:''});$('#library').scrollIntoView();if(r.allow_preview!==false&&(r.source==='GitHub'?r.url:r.storage_path).toLowerCase().endsWith('.pdf'))preview(r);}else toast('This material is no longer available. Explore the library below.');}
 
 }
 setInterval(()=>{if(!document.hidden)load().catch(()=>{});},60000);
