@@ -98,7 +98,7 @@ $('#onesignal-refresh').onclick=()=>loadOneSignalAnalytics().catch(e=>$('#onesig
 $('#creator-analytics-refresh').onclick=()=>loadCreatorAnalytics().catch(e=>$('#creator-analytics-status').textContent=e.message);
 $('#admin-reports').onclick=async e=>{const b=e.target.closest('[data-resolve-report]');if(!b||!authorised)return;b.disabled=true;try{await requireAdmin();const {error}=await db.from('material_reports').update({status:'resolved',resolved_at:new Date().toISOString()}).eq('id',b.dataset.resolveReport);if(error)throw error;await loadReports();status('Report marked resolved.');}catch(error){status(error.message);}finally{b.disabled=false;}};
 
-let pdfAdminUpdates=[],pdfAdminLikes=[],pdfAdminComments=[],pdfAdminActivity=[];
+let pdfAdminUpdates=[],pdfAdminLikes=[],pdfAdminComments=[],pdfAdminActivity=[],pdfAdminEvents=[];
 let pdfAdminTab='overview';
 function pdfAdminLog(action,details){db.from('pdf_update_admin_activity').insert({action,details}).then(({error})=>{if(error)console.warn('PDF Updates activity log unavailable:',error.message);});}
 function pdfAdminStats(){
@@ -110,11 +110,12 @@ function pdfAdminStats(){
 function pdfAdminShowTab(tab){
  pdfAdminTab=tab;
  document.querySelectorAll('[data-pdf-admin-tab]').forEach(b=>{b.classList.toggle('active',b.dataset.pdfAdminTab===tab);b.setAttribute('aria-pressed',String(b.dataset.pdfAdminTab===tab));});
- for(const name of ['overview','updates','likes','comments','activity'])$('#pdf-admin-'+name).hidden=name!==tab;
+ for(const name of ['overview','updates','likes','comments','activity','analytics'])$('#pdf-admin-'+name).hidden=name!==tab;
  if(tab==='updates')renderPdfAdminUpdates();
  if(tab==='likes')renderPdfAdminLikes();
  if(tab==='comments')renderPdfAdminComments();
  if(tab==='activity')renderPdfAdminActivity();
+ if(tab==='analytics')loadPdfUpdateAnalytics().catch(e=>$('#pdf-update-analytics-status').textContent=e.message);
 }
 function renderPdfAdminUpdates(){
  const term=($('#pdf-admin-search')?.value||'').trim().toLowerCase(),visibility=$('#pdf-admin-visibility')?.value||'all',sort=$('#pdf-admin-sort')?.value||'newest';
@@ -151,8 +152,33 @@ async function loadPdfUpdatesAdmin(){
  pdfAdminStats();renderPdfAdminUpdates();renderPdfAdminLikes();renderPdfAdminComments();renderPdfAdminActivity();
  if(a.error)node.textContent+=' · Run supabase/pdf-updates-admin-activity.sql to enable activity history.';
 }
+async function loadPdfUpdateAnalytics(){
+ await requireAdmin();
+ const node=$('#pdf-update-analytics-status'),metrics=$('#pdf-update-analytics-metrics'),top=$('#pdf-update-analytics-top'),daily=$('#pdf-update-analytics-daily');
+ if(!node||!metrics||!top||!daily)return;
+ node.textContent='Loading private PDF Updates analytics…';metrics.innerHTML='';top.innerHTML='';daily.innerHTML='';
+ const range=$('#pdf-update-analytics-range')?.value||'all',since=range==='all'?null:new Date(Date.now()-Number(range)*86400000).toISOString();
+ let query=db.from('pdf_update_analytics').select('event_type,update_id,visitor_id,session_id,created_at').order('created_at',{ascending:false}).limit(10000);
+ if(since)query=query.gte('created_at',since);
+ const {data,error}=await query;if(error)throw error;
+ pdfAdminEvents=data||[];
+ const pageViews=pdfAdminEvents.filter(x=>x.event_type==='page_view'),clicks=pdfAdminEvents.filter(x=>x.event_type==='update_click');
+ const uniqueVisitors=new Set(pageViews.map(x=>x.visitor_id)).size;
+ const cards=[[uniqueVisitors.toLocaleString('en-IN'),'Unique visitors','Anonymous visitors who opened PDF Updates'],[pageViews.length.toLocaleString('en-IN'),'Total page visits','One visit per browser tab session'],[clicks.length.toLocaleString('en-IN'),'PDF update clicks','One click per update per tab session']];
+ metrics.innerHTML=cards.map(([n,label,detail])=>'<article class="onesignal-metric"><span>'+label+'</span><strong>'+n+'</strong><small>'+detail+'</small></article>').join('');
+ const clickCounts=new Map();for(const event of clicks)clickCounts.set(event.update_id,(clickCounts.get(event.update_id)||0)+1);
+ const titles=new Map(pdfAdminUpdates.map(x=>[x.id,x.title]));
+ const ranked=[...clickCounts.entries()].sort((x,y)=>y[1]-x[1]).slice(0,10);
+ top.innerHTML=ranked.map(([id,count],i)=>'<article class="pdf-admin-interaction"><div><strong>'+String(i+1)+'. '+esc(titles.get(id)||'Deleted or unavailable update')+'</strong><small>Individual PDF update</small></div><b>'+count.toLocaleString('en-IN')+' clicks</b></article>').join('')||'<div class="pdf-admin-empty">No PDF update clicks recorded for this period yet.</div>';
+ const days=new Map();for(let i=13;i>=0;i--){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-i);days.set(d.toISOString().slice(0,10),{visits:0,clicks:0});}
+ for(const event of pdfAdminEvents){const key=new Date(event.created_at).toISOString().slice(0,10),entry=days.get(key);if(entry)entry[event.event_type==='page_view'?'visits':'clicks']++;}
+ daily.innerHTML='<div class="pdf-admin-daily-head"><span>Date</span><span>Page visits</span><span>PDF clicks</span></div>'+[...days.entries()].reverse().map(([day,v])=>'<div class="pdf-admin-daily-row"><span>'+new Date(day+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'})+'</span><b>'+v.visits+'</b><b>'+v.clicks+'</b></div>').join('');
+ node.textContent='Private analytics · Updated '+new Date().toLocaleTimeString('en-IN')+(pdfAdminEvents.length===10000?' · Showing the latest 10,000 events.':'');
+}
 document.querySelectorAll('[data-pdf-admin-tab]').forEach(b=>b.addEventListener('click',()=>pdfAdminShowTab(b.dataset.pdfAdminTab)));
 $('#pdf-updates-refresh').onclick=()=>loadPdfUpdatesAdmin().catch(e=>$('#pdf-updates-admin-status').textContent=e.message);
+$('#pdf-update-analytics-refresh').onclick=()=>loadPdfUpdateAnalytics().catch(e=>$('#pdf-update-analytics-status').textContent=e.message);
+$('#pdf-update-analytics-range').onchange=()=>loadPdfUpdateAnalytics().catch(e=>$('#pdf-update-analytics-status').textContent=e.message);
 $('#pdf-admin-search').oninput=renderPdfAdminUpdates;$('#pdf-admin-visibility').onchange=renderPdfAdminUpdates;$('#pdf-admin-sort').onchange=renderPdfAdminUpdates;
 $('#pdf-admin-like-search').oninput=renderPdfAdminLikes;$('#pdf-admin-comment-search').oninput=renderPdfAdminComments;$('#pdf-admin-comment-filter').onchange=renderPdfAdminComments;
 $('#pdf-admin-select-all').onclick=()=>{const boxes=[...document.querySelectorAll('#pdf-updates-admin-list [data-pdf-select]')];const select=boxes.some(b=>!b.checked);boxes.forEach(b=>b.checked=select);};
