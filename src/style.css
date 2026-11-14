@@ -412,3 +412,16 @@ body{transition:background-color .45s ease,color .45s ease}
 .shared-card-badge:before{content:'✦';margin-right:6px}
 @keyframes shared-library-card-glow{50%{box-shadow:0 0 0 8px #ff794933,0 18px 55px #ff794955}}
 @media(prefers-reduced-motion:reduce){.shared-card-highlight{animation:none}}
+
+/* Typography limited to the main library PDF cards */
+#catalogue .card{font-family:Arial,Helvetica,sans-serif}
+#catalogue .card h3,
+#catalogue .card .subject{font-family:"Times New Roman",Times,serif}
+#catalogue .card .description,
+#catalogue .card .meta,
+#catalogue .card .file-icon,
+#catalogue .card .pill,
+#catalogue .card .card-actions,
+#catalogue .card .card-actions button,
+#catalogue .card .shared-card-badge{font-family:Arial,Helvetica,sans-serif}
+
