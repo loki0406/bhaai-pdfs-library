@@ -404,3 +404,11 @@ body{transition:background-color .45s ease,color .45s ease}
 .skeleton-icon{width:44px;height:50px;border-radius:9px}.skeleton-title{height:19px;width:78%;margin-top:8px}.skeleton-short{height:12px;width:48%}.skeleton-meta{height:36px;width:100%;margin-top:auto}.skeleton-actions{height:38px;width:88%;margin-top:8px}
 @keyframes bhaai-shimmer{100%{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){.skeleton-line:after{animation:none;transform:none;background:#ffffff08}}
+
+
+/* Highlight the exact library material opened from a Share Cards link */
+.shared-card-highlight{position:relative;border:2px solid var(--orange)!important;box-shadow:0 0 0 5px #ff79492b,0 18px 55px #ff794933!important;scroll-margin-top:125px;animation:shared-library-card-glow 1.5s ease-in-out 3}
+.shared-card-badge{display:inline-flex;align-items:center;margin:0 0 12px;padding:6px 11px;border-radius:30px;background:var(--orange);color:#1b100c;font-size:10px;font-weight:900;letter-spacing:1px}
+.shared-card-badge:before{content:'✦';margin-right:6px}
+@keyframes shared-library-card-glow{50%{box-shadow:0 0 0 8px #ff794933,0 18px 55px #ff794955}}
+@media(prefers-reduced-motion:reduce){.shared-card-highlight{animation:none}}
