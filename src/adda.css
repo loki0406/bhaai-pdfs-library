@@ -55,3 +55,10 @@
 .pdf-admin-empty{padding:28px;border:1px dashed var(--border);border-radius:16px;color:var(--muted);text-align:center}
 [data-theme=light] .pdf-admin-tabs button.active{color:#9a3d1d}
 @media(max-width:650px){.pdf-admin-overview{grid-template-columns:1fr}.pdf-admin-card-main{flex-direction:column}.pdf-admin-card-actions{justify-content:flex-start}.pdf-admin-interaction{align-items:flex-start;flex-direction:column}.pdf-admin-card{padding:16px}.pdf-admin-toolbar>*{width:100%;min-width:0!important}.pdf-admin-bulk>*{flex:1;min-width:0}.pdf-admin-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.pdf-admin-tabs button:last-child{grid-column:1/-1}}
+
+.pdf-admin-daily{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--panel);margin:12px 0 28px}
+.pdf-admin-daily-head,.pdf-admin-daily-row{display:grid;grid-template-columns:1fr .7fr .7fr;gap:12px;padding:12px 16px;align-items:center}
+.pdf-admin-daily-head{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);background:#ff794910}
+.pdf-admin-daily-row{border-top:1px solid var(--border);font-size:13px}
+.pdf-admin-daily-row b{text-align:left;font-variant-numeric:tabular-nums}
+@media(max-width:420px){.pdf-admin-daily-head,.pdf-admin-daily-row{grid-template-columns:1fr .6fr .6fr;padding:11px 10px;font-size:11px}}
