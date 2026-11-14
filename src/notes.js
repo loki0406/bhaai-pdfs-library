@@ -53,19 +53,9 @@ export function setupNotes({db,esc,onNavigate,getResources=()=>[],onMaterial,isH
    const button=share||shareCards,original=button.textContent;
    button.disabled=true;button.textContent=shareCards?'Preparing cards…':'Preparing…';
    try{
-    const cardLinks=new Map();
-    if(shareCards&&attached.length){
-     const ids=attached.map(r=>r.id).filter(id=>!String(id).startsWith('git:'));
-     if(ids.length){
-      const {data,error}=await db.from('pdf_updates').select('id,resource_id').in('resource_id',ids).eq('is_visible',true);
-      if(error)throw error;
-      for(const update of data||[])cardLinks.set(String(update.resource_id),String(update.id));
-     }
-    }
     const links=attached.map(r=>{
      let href=materialPageUrl(r.id);
-     const updateId=cardLinks.get(String(r.id));
-     if(shareCards&&updateId){const target=new URL('/pdf-updates.html',location.origin);target.searchParams.set('highlight',updateId);href=target.toString();}
+     if(shareCards){const target=new URL('/',location.origin);target.searchParams.set('card',r.id);href=target.toString();}
      return emoji.pdf+' '+r.title+'\n'+href;
     });
     const unavailable=(post.material_ids||[]).length-attached.length;
