@@ -43,7 +43,41 @@ export function setupNotes({db,esc,onNavigate,getResources=()=>[],onMaterial,isH
  function openPost(id){if(onNavigate)onNavigate(true);else setOpen(true);pendingPost=id;if(open)render();}
  $('#notes-open').onclick=()=>onNavigate?onNavigate(true):setOpen(true);
  $('#notes-back').onclick=()=>onNavigate?onNavigate(false):setOpen(false);
- $('#tweets').onclick=e=>{const share=e.target.closest('[data-share-tweet]');if(share){const post=posts.find(p=>p.id===share.dataset.shareTweet);if(post){const attached=(post.material_ids||[]).map(id=>getResources().find(r=>r.id===id&&r.published!==false)).filter(Boolean);const emoji={pdf:String.fromCodePoint(0x1F4C4),megaphone:String.fromCodePoint(0x1F4E2),link:String.fromCodePoint(0x1F517),heart:String.fromCodePoint(0x2764,0xFE0F)};const links=attached.map(r=>`${emoji.pdf} ${r.title}\n${materialPageUrl(r.id)}`);const unavailable=(post.material_ids||[]).length-attached.length;const message=`${emoji.megaphone} *Bhaai PDFs — New Update*\n\n*${post.body}*${links.length?`\n\n${emoji.link} *PDF Attachments:*\n${links.join('\n\n')}`:''}${unavailable>0?`\n\n${unavailable} attachment(s) are no longer available in the library.`:''}\n\n🔔 *Follow PDF Updates on our website to stay updated with the latest PDFs and announcements.*\n\n🆕 *NEW SECTION*\n🌐 *PDF Updates:*\nhttps://bhaai-pdfs-library.vercel.app/pdf-updates.html\n\n✨ *Keep Learning. Keep Growing!*\n— *TEAM BHAAI PDFS*`;const isMobile=navigator.userAgentData?.mobile??/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);const encodedMessage=encodeURIComponent(message);const whatsappUrl=isMobile?`https://wa.me/?text=${encodedMessage}`:`whatsapp://send?text=${encodedMessage}`;window.location.href=whatsappUrl;}return;}const b=e.target.closest('[data-note-material]');if(b){const r=getResources().find(r=>r.id===b.dataset.noteMaterial&&r.published!==false);if(r&&onMaterial)onMaterial(r.id);else load();}};
+ $('#tweets').onclick=async e=>{
+  const share=e.target.closest('[data-share-tweet]'),shareCards=e.target.closest('[data-share-tweet-cards]');
+  if(share||shareCards){
+   const post=posts.find(p=>p.id===(share||shareCards).dataset[share?'shareTweet':'shareTweetCards']);
+   if(!post)return;
+   const attached=(post.material_ids||[]).map(id=>getResources().find(r=>r.id===id&&r.published!==false)).filter(Boolean);
+   const emoji={pdf:String.fromCodePoint(0x1F4C4),megaphone:String.fromCodePoint(0x1F4E2),link:String.fromCodePoint(0x1F517)};
+   const button=share||shareCards,original=button.textContent;
+   button.disabled=true;button.textContent=shareCards?'Preparing cards…':'Preparing…';
+   try{
+    const cardLinks=new Map();
+    if(shareCards&&attached.length){
+     const ids=attached.map(r=>r.id).filter(id=>!String(id).startsWith('git:'));
+     if(ids.length){
+      const {data,error}=await db.from('pdf_updates').select('id,resource_id').in('resource_id',ids).eq('is_visible',true);
+      if(error)throw error;
+      for(const update of data||[])cardLinks.set(String(update.resource_id),String(update.id));
+     }
+    }
+    const links=attached.map(r=>{
+     let href=materialPageUrl(r.id);
+     const updateId=cardLinks.get(String(r.id));
+     if(shareCards&&updateId){const target=new URL('/pdf-updates.html',location.origin);target.searchParams.set('highlight',updateId);href=target.toString();}
+     return emoji.pdf+' '+r.title+'\n'+href;
+    });
+    const unavailable=(post.material_ids||[]).length-attached.length;
+    const message=emoji.megaphone+' *Bhaai PDFs — New Update*\n\n*'+post.body+'*'+(links.length?'\n\n'+emoji.link+' *PDF Attachments:*\n'+links.join('\n\n'):'')+(unavailable>0?'\n\n'+unavailable+' attachment(s) are no longer available in the library.':'')+'\n\n🔔 *Follow PDF Updates on our website to stay updated with the latest PDFs and announcements.*\n\n🆕 *NEW SECTION*\n🌐 *PDF Updates:*\nhttps://bhaai-pdfs-library.vercel.app/pdf-updates.html\n\n✨ *Keep Learning. Keep Growing!*\n— *TEAM BHAAI PDFS*';
+    const isMobile=navigator.userAgentData?.mobile??/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    const whatsappUrl=(isMobile?'https://wa.me/?text=':'whatsapp://send?text=')+encodeURIComponent(message);
+    window.location.href=whatsappUrl;
+   }catch(error){alert('Could not prepare this WhatsApp message: '+error.message);}
+   finally{button.disabled=false;button.textContent=original;}
+   return;
+  }
+  const b=e.target.closest('[data-note-material]');if(b){const r=getResources().find(r=>r.id===b.dataset.noteMaterial&&r.published!==false);if(r&&onMaterial)onMaterial(r.id);else load();}};
  setupPush();
  loadSubscriberCount();
  setInterval(()=>{if(!document.hidden){load().catch(()=>{});loadSubscriberCount();}},300000);
