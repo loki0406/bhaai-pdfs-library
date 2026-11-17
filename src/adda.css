@@ -81,3 +81,8 @@
 @media(max-width:560px){.bulk-fields{grid-template-columns:1fr}.bulk-fields .bulk-description{grid-column:auto}.bulk-pdf-card{padding:14px}.bulk-pdf-card-head{align-items:flex-start;flex-direction:column}}
 
 #resource-form[hidden],#bulk-upload-panel[hidden]{display:none!important}
+
+.bulk-file-actions{display:flex;gap:8px;flex-wrap:wrap}
+.bulk-pdf-card .adda-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#bulk-clear-all{justify-self:start}
+@media(max-width:560px){.bulk-file-actions{width:100%}.bulk-file-actions button{flex:1}.bulk-pdf-card .adda-checks{grid-template-columns:1fr}}
