@@ -79,3 +79,5 @@
 .bulk-fields .bulk-description{grid-column:1/-1}
 .bulk-pdf-card .adda-checks{margin:0}
 @media(max-width:560px){.bulk-fields{grid-template-columns:1fr}.bulk-fields .bulk-description{grid-column:auto}.bulk-pdf-card{padding:14px}.bulk-pdf-card-head{align-items:flex-start;flex-direction:column}}
+
+#resource-form[hidden],#bulk-upload-panel[hidden]{display:none!important}
