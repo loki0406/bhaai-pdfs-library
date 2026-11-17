@@ -86,3 +86,17 @@
 .bulk-pdf-card .adda-checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 #bulk-clear-all{justify-self:start}
 @media(max-width:560px){.bulk-file-actions{width:100%}.bulk-file-actions button{flex:1}.bulk-pdf-card .adda-checks{grid-template-columns:1fr}}
+
+.upload-progress-panel{margin-top:18px;padding:18px;border:1px solid var(--border);border-radius:16px;background:var(--panel);display:grid;gap:11px}
+.upload-progress-panel[hidden]{display:none!important}
+.upload-progress-heading{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.upload-progress-heading b{font-size:24px;font-variant-numeric:tabular-nums;color:var(--accent,#e8794f)}
+.upload-progress-track{height:12px;border-radius:999px;background:var(--border);overflow:hidden}
+.upload-progress-bar{height:100%;width:0%;border-radius:inherit;background:linear-gradient(90deg,#e8794f,#f5a36d);transition:width .18s ease;position:relative;overflow:hidden}
+.upload-progress-bar:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 20%,#ffffff66 50%,transparent 80%);transform:translateX(-100%);animation:upload-shimmer 1.4s infinite}
+.bulk-file-progress-list{display:grid;gap:10px}
+.bulk-file-progress-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 12px;align-items:center;font-size:13px}
+.bulk-file-progress-row span{overflow-wrap:anywhere}.bulk-file-progress-row b{font-variant-numeric:tabular-nums}
+.bulk-file-progress-row .upload-progress-track{grid-column:1/-1;height:7px}
+@keyframes upload-shimmer{to{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.upload-progress-bar,.upload-progress-bar:after{animation:none;transition:none}}
