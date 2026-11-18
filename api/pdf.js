@@ -31,7 +31,7 @@ export default async function handler(req,res){
   res.status(upstream.status);
   res.setHeader('Content-Type','application/pdf');
   res.setHeader('Content-Disposition',`inline; filename="${ascii}"; filename*=UTF-8''${encoded}`);
-  res.setHeader('Cache-Control','private, no-store');
+  res.setHeader('Cache-Control','public, max-age=0, s-maxage=300, stale-while-revalidate=60');
   for(const name of ['content-length','content-range','accept-ranges','etag','last-modified']){const value=upstream.headers.get(name);if(value)res.setHeader(name,value);}
   if(req.method==='HEAD'||!upstream.body)return res.end();
   await pipeline(Readable.fromWeb(upstream.body),res);
