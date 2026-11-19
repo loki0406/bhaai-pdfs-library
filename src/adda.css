@@ -100,3 +100,51 @@
 .bulk-file-progress-row .upload-progress-track{grid-column:1/-1;height:7px}
 @keyframes upload-shimmer{to{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){.upload-progress-bar,.upload-progress-bar:after{animation:none;transition:none}}
+
+/* Admin-only visual refresh: BHAAI ADDA Creator Workspace */
+.adda-body{--admin-accent:#b95b37;--admin-accent-soft:#b95b3715;--admin-radius:18px}
+.adda-body main{max-width:1480px;padding:0 clamp(18px,3.2vw,48px) 72px}
+.adda-body header{padding:14px clamp(18px,3.2vw,48px);background:color-mix(in srgb,var(--bg,#0a0a0f) 88%,transparent);backdrop-filter:blur(22px)}
+.adda-body header .brand{font-size:21px;letter-spacing:-.35px}
+.adda-body header nav{gap:10px}
+.adda-body header nav .secondary{padding:10px 13px;border-radius:11px}
+.adda-body .adda-heading{padding:36px 0 22px;align-items:center}
+.adda-body .adda-heading .eyebrow{margin-bottom:13px}
+.adda-body .adda-heading h1{font-size:clamp(36px,4.4vw,58px);line-height:1.02;letter-spacing:-2px;margin-bottom:15px}
+.adda-body .adda-heading h1 span{background:linear-gradient(100deg,#b95b37 12%,#d49a56 60%,#638d70);background-clip:text;-webkit-text-fill-color:transparent}
+.adda-body #admin-identity{font-size:13px;margin:0;color:var(--muted)}
+.adda-body #logout{white-space:nowrap}
+.adda-body .adda-stats{gap:12px;margin-bottom:22px}
+.adda-body .adda-stats p{background:var(--panel,#15151c);border-radius:16px;padding:18px 20px;min-width:145px;box-shadow:0 4px 18px #00000005}
+.adda-body .adda-stats strong{font-size:clamp(24px,2.2vw,30px);letter-spacing:-.7px}
+.adda-body .adda-shell{grid-template-columns:218px minmax(0,1fr);gap:24px;align-items:start}
+.adda-body .adda-nav{position:sticky;top:88px;gap:6px;padding:9px;border:1px solid var(--border);border-radius:18px;background:var(--panel,#15151c);box-shadow:0 12px 36px #00000008}
+.adda-body .adda-nav button,.adda-body .adda-nav a{padding:12px 13px;border-radius:11px;border:1px solid transparent;background:transparent;font-size:13px;line-height:1.35}
+.adda-body .adda-nav button:hover,.adda-body .adda-nav a:hover{background:var(--admin-accent-soft);border-color:#b95b3720;color:var(--text,#f0ede8)}
+.adda-body .adda-nav .active{background:linear-gradient(100deg,#b95b371b,#b95b3708);color:#d77b55;border-color:#b95b3735;box-shadow:inset 3px 0 0 var(--admin-accent)}
+.adda-body .adda-nav a{margin-top:5px;border-top:1px solid var(--border);border-radius:0 0 10px 10px}
+.adda-body .adda-content>section{animation:adda-arrive .22s ease-out}
+.adda-body .manager-heading{gap:14px;margin:0 0 16px}
+.adda-body .manager-heading h2,.adda-body .adda-content>section>h2{font-size:clamp(23px,2.3vw,30px);letter-spacing:-.8px}
+.adda-body .manager-heading .eyebrow{margin-bottom:8px}
+.adda-body .adda-content .secondary{border-radius:10px;padding:10px 13px}
+.adda-body .adda-content .primary{border-radius:11px;padding:12px 16px}
+.adda-body .adda-content .adda-editor{border-radius:19px;padding:clamp(18px,2.3vw,28px);background:var(--panel,#17171f);margin:20px 0}
+.adda-body .adda-content .manager-card,.adda-body .pdf-admin-card,.adda-body .pdf-admin-comment,.adda-body .pdf-admin-interaction{border-radius:16px}
+.adda-body .admin-activity-list{display:grid;gap:0;border:1px solid var(--border);border-radius:18px;background:var(--panel,#15151c);overflow:hidden}
+.adda-body .admin-activity-list>*{padding:16px 18px;border-bottom:1px solid var(--border)}
+.adda-body .admin-activity-list>*:last-child{border-bottom:0}
+.adda-body .onesignal-metric{border-radius:16px;min-height:126px;padding:18px}
+.adda-body .pdf-admin-tabs{border-radius:14px}
+.adda-body input,.adda-body select,.adda-body textarea{border-radius:10px}
+.adda-body button,.adda-body a{transition:transform .16s ease,border-color .16s ease,background .16s ease,box-shadow .16s ease}
+.adda-body button:hover:not(:disabled){transform:translateY(-1px)}
+.adda-body button:active:not(:disabled){transform:translateY(0) scale(.985)}
+[data-theme=light] .adda-body{--panel:#fffdfa}
+[data-theme=light] .adda-body .adda-nav{background:#fffdfa;box-shadow:0 8px 26px #5b34250a}
+[data-theme=light] .adda-body .adda-nav button,[data-theme=light] .adda-body .adda-nav a{background:transparent}
+[data-theme=light] .adda-body .adda-nav .active{background:linear-gradient(100deg,#b95b3714,#b95b3706);color:#9f4727;border-color:#b95b3728;box-shadow:inset 3px 0 0 #b95b37}
+[data-theme=light] .adda-body .adda-stats p{background:#fffdfa;box-shadow:0 4px 20px #6e493a08}
+@media(max-width:900px){.adda-body .adda-shell{grid-template-columns:1fr;gap:14px}.adda-body .adda-nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.adda-body .adda-nav button,.adda-body .adda-nav a{min-width:0}.adda-body .adda-nav a{grid-column:1/-1}.adda-body .adda-heading{padding-top:28px}}
+@media(max-width:600px){.adda-body main{padding-inline:15px}.adda-body header{padding:12px 15px}.adda-body header nav{gap:6px;flex-wrap:wrap;justify-content:flex-end}.adda-body header nav .secondary{font-size:11px;padding:8px 10px}.adda-body header .brand{font-size:18px}.adda-body header .brand img{width:34px;height:34px}.adda-body .adda-heading{padding:24px 0 18px;gap:12px;align-items:flex-start}.adda-body .adda-heading h1{font-size:37px;letter-spacing:-1.3px}.adda-body .adda-heading #logout{padding:9px 11px;font-size:12px}.adda-body .adda-nav{grid-template-columns:1fr 1fr;padding:6px;border-radius:14px}.adda-body .adda-nav button,.adda-body .adda-nav a{font-size:12px;padding:10px}.adda-body .adda-stats p{min-width:calc(50% - 6px);padding:15px}.adda-body .adda-stats strong{font-size:25px}.adda-body .manager-heading{align-items:flex-start;flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.adda-body .adda-content>section{animation:none}}
