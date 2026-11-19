@@ -24,7 +24,9 @@ async function loadInfrastructureMonitor(){
  if(!authorised||!db)return;
  const statusNode=$('#infra-monitor-status'),alertsNode=$('#infra-monitor-alerts'),setupNode=$('#infra-auto-setup'),sbStatus=$('#infra-sb-status'),sbCards=$('#infra-sb-live-cards'),sbQuotas=$('#infra-sb-quotas'),vcQuotas=$('#infra-vc-quotas'),alertStatus=$('#infra-auto-alert-status');
  if(!statusNode||!sbCards)return;
- statusNode.textContent='Fetching supported provider metrics…';alertsNode.innerHTML='';sbCards.innerHTML='<p class="tiny">Loading…</p>';
+ statusNode.textContent='Fetching supported provider metrics…';
+ if(alertsNode)alertsNode.innerHTML='';
+ sbCards.innerHTML='<p class="tiny">Loading automatic metrics…</p>';
  try{
   const {data:{session}}=await db.auth.getSession();
   if(!session?.access_token)throw Error('Admin session expired. Sign in again.');
@@ -34,21 +36,23 @@ async function loadInfrastructureMonitor(){
   const s=payload.supabase||{},count=s.serviceCounts,number=v=>Number(v||0).toLocaleString('en-IN');
   const cards=[];
   if(s.requestCount!==null&&s.requestCount!==undefined)cards.push(['Provider API request count',number(s.requestCount),'Provider-reported count; not a quota meter']);
-  if(count){cards.push(['Auth requests',number(count.auth),'Latest returned provider interval'],['REST requests',number(count.rest),'Latest returned provider interval'],['Storage API requests',number(count.storage),'Latest returned provider interval'],['Realtime requests',number(count.realtime),'Latest returned provider interval']);}
+  if(count)cards.push(['Auth requests',number(count.auth),'Latest provider interval'],['REST requests',number(count.rest),'Latest provider interval'],['Storage API requests',number(count.storage),'Latest provider interval'],['Realtime requests',number(count.realtime),'Latest provider interval']);
   const [downloads,shares]=await Promise.all([db.from('download_counts').select('downloads'),db.from('whatsapp_share_counts').select('shares')]);
   const downloadTotal=!downloads.error&&Array.isArray(downloads.data)?downloads.data.reduce((n,r)=>n+Number(r.downloads||0),0):null;
   const shareTotal=!shares.error&&Array.isArray(shares.data)?shares.data.reduce((n,r)=>n+Number(r.shares||0),0):null;
   if(downloadTotal!==null)cards.push(['BHAAI tracked downloads',number(downloadTotal),'Application analytics · all tracked materials']);
   if(shareTotal!==null)cards.push(['WhatsApp shares tracked',number(shareTotal),'Application analytics · all tracked materials']);
-  sbCards.innerHTML=cards.length?cards.map(([title,value,detail])=>'<article class="infra-auto-card"><span>'+esc(title)+'</span><strong>'+esc(value)+'</strong><small>'+esc(detail)+'</small></article>').join('':'<div class="infra-auto-empty">No automatic metrics were returned. Configure the Management API token below.</div>';
-  if(s.projectRef){const link=$('#infra-sb-dashboard');if(link)link.href='https://supabase.com/dashboard/project/'+encodeURIComponent(s.projectRef);}
-  const live=s.configured&&!s.error&&count;
+  sbCards.innerHTML=cards.length?cards.map(([title,value,detail])=>'<article class="infra-auto-card"><span>'+esc(title)+'</span><strong>'+esc(value)+'</strong><small>'+esc(detail)+'</small></article>').join(''):'<div class="infra-auto-empty">No automatic metrics were returned. Configure the Management API token below.</div>';
+  if(s.projectRef){const projectLink=$('#infra-sb-dashboard');if(projectLink)projectLink.href='https://supabase.com/dashboard/project/'+encodeURIComponent(s.projectRef);}
+  const live=Boolean(s.configured&&!s.error&&count);
   if(sbStatus){sbStatus.textContent=live?'Provider API data connected':s.configured?'Provider API issue':'Setup required';sbStatus.className='infra-auto-pill '+(live?'good':'warn');}
-  if(setupNode){setupNode.innerHTML=!s.configured?'<article class="infra-auto-setup-card"><strong>Enable Supabase automatic request metrics</strong><p>Add the server-only Vercel environment variable <code>SUPABASE_MANAGEMENT_TOKEN</code>. Create a scoped Supabase Personal Access Token with the <code>analytics_usage_read</code> permission. The project reference is detected automatically. Do not prefix this secret with <code>VITE_</code>.</p><p>After adding it in Vercel → Project Settings → Environment Variables, redeploy. This monitor never sends the token to the browser.</p><a href="https://supabase.com/dashboard/account/tokens" target="_blank" rel="noopener">Create Supabase token ↗</a></article>':s.error?'<article class="infra-auto-setup-card warning"><strong>Supabase API connection needs attention</strong><p>'+esc(s.error)+'</p></article>':'';}
+  if(setupNode){
+   setupNode.innerHTML=!s.configured?'<article class="infra-auto-setup-card"><strong>Enable Supabase automatic request metrics</strong><p>Add the server-only Vercel environment variable <code>SUPABASE_MANAGEMENT_TOKEN</code>. Create a scoped Supabase Personal Access Token with the <code>analytics_usage_read</code> permission. The project reference is detected automatically. Do not prefix this secret with <code>VITE_</code>.</p><p>After adding it in Vercel → Project Settings → Environment Variables, redeploy. This monitor never sends the token to the browser.</p><a href="https://supabase.com/dashboard/account/tokens" target="_blank" rel="noopener">Create Supabase token ↗</a></article>':s.error?'<article class="infra-auto-setup-card warning"><strong>Supabase API connection needs attention</strong><p>'+esc(s.error)+'</p></article>':'';
+  }
   const sbLimits=[['Uncached egress','5 GB'],['Cached egress','5 GB'],['File storage','1 GB'],['Database size','500 MB'],['Monthly active users','50,000']];
-  sbQuotas.innerHTML=sbLimits.map(([name,limit])=>'<article class="infra-auto-card unavailable"><span>'+esc(name)+'</span><strong>Usage unavailable</strong><small>Free plan limit: '+esc(limit)+' · check provider dashboard</small></article>').join('');
+  if(sbQuotas)sbQuotas.innerHTML=sbLimits.map(([name,limit])=>'<article class="infra-auto-card unavailable"><span>'+esc(name)+'</span><strong>Usage unavailable</strong><small>Free plan limit: '+esc(limit)+' · check provider dashboard</small></article>').join('');
   const vcLimits=[['Fast Data Transfer','100 GB/month'],['Fast Origin Transfer','10 GB/month'],['CDN Requests','1,000,000/month'],['Function Invocations','1,000,000/month']];
-  vcQuotas.innerHTML=vcLimits.map(([name,limit])=>'<article class="infra-auto-card unavailable"><span>'+esc(name)+'</span><strong>Live meter unavailable</strong><small>Hobby allowance: '+esc(limit)+'</small></article>').join('');
+  if(vcQuotas)vcQuotas.innerHTML=vcLimits.map(([name,limit])=>'<article class="infra-auto-card unavailable"><span>'+esc(name)+'</span><strong>Live meter unavailable</strong><small>Hobby allowance: '+esc(limit)+'</small></article>').join('');
   if(alertsNode){const msg=s.error||(!s.configured?'Supabase provider metrics are not connected yet.':'Exact GB usage cannot be read from the verified provider API.');alertsNode.innerHTML='<article class="infra-auto-alert warning"><strong>Quota monitoring limitation</strong><span>'+esc(msg)+'</span></article>';}
   if(alertStatus)alertStatus.innerHTML='<article class="infra-auto-alert warning"><strong>No exact quota alert can be calculated yet</strong><span>Automatic request metrics may be available after token setup, but exact egress/storage/transfer quota meters are not exposed through the verified API. Check provider-native usage pages for threshold alerts.</span></article>';
   statusNode.textContent='Updated '+new Date(payload.updatedAt||Date.now()).toLocaleString('en-IN')+' · auto-refresh every 15 minutes while this panel is open.';
