@@ -185,3 +185,24 @@
 .adda-body .adda-nav button{letter-spacing:.05px}
 @media(max-width:900px){.adda-body .adda-heading{padding:30px 24px}.adda-body .adda-shell{grid-template-columns:1fr}.adda-body .adda-nav{position:static}}
 @media(max-width:600px){.adda-body .adda-heading{padding:25px 19px;margin:10px 0 16px;border-radius:19px}.adda-body .adda-heading h1{font-size:38px}.adda-body .adda-heading:after{font-size:100px;right:-10px;bottom:-18px;letter-spacing:-7px}.adda-body .adda-nav{display:grid;grid-template-columns:1fr 1fr}.adda-body header nav .secondary{padding:7px 9px;font-size:11px}}
+
+/* Infrastructure Monitor module */
+.adda-body .infra-provider-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0}
+.adda-body .infra-provider{background:var(--panel,#181821);border:1px solid var(--border);border-radius:18px;padding:20px}
+.adda-body .infra-provider-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.adda-body .infra-provider-head h3{font-size:22px;margin:4px 0}
+.adda-body .infra-tag{font-size:10px;letter-spacing:1px;border:1px solid var(--border);border-radius:99px;padding:6px 8px;color:var(--muted)}
+.adda-body .infra-metrics{display:grid;gap:14px;margin-top:18px}
+.adda-body .infra-metric{border-top:1px solid var(--border);padding-top:12px}
+.adda-body .infra-metric-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.adda-body .infra-metric-head strong{font-size:14px}
+.adda-body .infra-status,.adda-body .infra-empty{font-size:11px;padding:5px 8px;border-radius:999px;background:#6c6c6c22;color:var(--muted)}
+.adda-body .infra-status.warning{background:#e0a43a26;color:#d5a54d}.adda-body .infra-status.high{background:#d77a3026;color:#e39455}.adda-body .infra-status.critical,.adda-body .infra-status.limit{background:#c9444428;color:#e87878}
+.adda-body .infra-track{height:9px;background:var(--border);border-radius:99px;overflow:hidden;margin:10px 0}
+.adda-body .infra-fill{height:100%;background:#63a87b;border-radius:99px}.adda-body .infra-fill.warning{background:#d5a54d}.adda-body .infra-fill.high{background:#e39455}.adda-body .infra-fill.critical,.adda-body .infra-fill.limit{background:#e87878}
+.adda-body .infra-remaining{font-size:12px;margin-bottom:3px}.adda-body .infra-metric small{color:var(--muted);font-size:11px}
+.adda-body .infra-alerts{display:grid;gap:8px;margin:12px 0}.adda-body .infra-alert{display:flex;flex-direction:column;gap:3px;padding:12px 15px;border-radius:12px;border:1px solid #d5a54d50;background:#d5a54d15;font-size:13px}.adda-body .infra-alert.high{border-color:#e3945550;background:#e3945515}.adda-body .infra-alert.critical{border-color:#e8787850;background:#e8787815}.adda-body .infra-alert.ok{border-color:#63a87b50;background:#63a87b15}
+.adda-body .infra-editor{margin-top:20px}.adda-body .infra-input-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.adda-body .infra-field{font-size:13px}.adda-body .infra-field .infra-limit{display:block;color:var(--muted);font-size:11px;margin:4px 0}.adda-body .infra-field input{width:100%;box-sizing:border-box}
+.adda-body .infra-history{display:grid;gap:10px}.adda-body .infra-history-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding:12px 0;font-size:12px}
+@media(max-width:850px){.adda-body .infra-provider-grid{grid-template-columns:1fr}.adda-body .infra-input-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.adda-body .infra-input-grid{grid-template-columns:1fr}.adda-body .infra-history-row{align-items:flex-start;flex-direction:column}}
