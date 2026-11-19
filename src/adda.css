@@ -148,3 +148,40 @@
 @media(max-width:900px){.adda-body .adda-shell{grid-template-columns:1fr;gap:14px}.adda-body .adda-nav{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.adda-body .adda-nav button,.adda-body .adda-nav a{min-width:0}.adda-body .adda-nav a{grid-column:1/-1}.adda-body .adda-heading{padding-top:28px}}
 @media(max-width:600px){.adda-body main{padding-inline:15px}.adda-body header{padding:12px 15px}.adda-body header nav{gap:6px;flex-wrap:wrap;justify-content:flex-end}.adda-body header nav .secondary{font-size:11px;padding:8px 10px}.adda-body header .brand{font-size:18px}.adda-body header .brand img{width:34px;height:34px}.adda-body .adda-heading{padding:24px 0 18px;gap:12px;align-items:flex-start}.adda-body .adda-heading h1{font-size:37px;letter-spacing:-1.3px}.adda-body .adda-heading #logout{padding:9px 11px;font-size:12px}.adda-body .adda-nav{grid-template-columns:1fr 1fr;padding:6px;border-radius:14px}.adda-body .adda-nav button,.adda-body .adda-nav a{font-size:12px;padding:10px}.adda-body .adda-stats p{min-width:calc(50% - 6px);padding:15px}.adda-body .adda-stats strong{font-size:25px}.adda-body .manager-heading{align-items:flex-start;flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){.adda-body .adda-content>section{animation:none}}
+
+/* Distinctive second pass: editorial studio layout, admin scope only */
+.adda-body{--studio-ink:#292122;--studio-terracotta:#b95b38;--studio-cream:#f5eee5}
+.adda-body .glow{height:850px;background:radial-gradient(ellipse at 8% 12%,#b95b381b,transparent 48%),radial-gradient(ellipse at 90% 26%,#678b7318,transparent 42%)}
+.adda-body header{border-bottom:1px solid #b95b3718;background:var(--studio-cream);color:var(--studio-ink);padding-block:12px}
+.adda-body header .brand{font-size:23px;letter-spacing:-1px}
+.adda-body header .brand-tag{color:#9b7863}
+.adda-body header nav .secondary{background:#fff8f0;border:1px solid #dfcbb9;color:#765642;border-radius:999px;padding:9px 14px}
+.adda-body .adda-heading{position:relative;padding:46px 34px 32px;margin:16px 0 22px;border:1px solid #e7d7c8;border-radius:26px;background:linear-gradient(110deg,#f1e2d3 0%,#f9f3eb 58%,#e7eee5 100%);overflow:hidden}
+.adda-body .adda-heading:after{content:"ADDA";position:absolute;right:-20px;bottom:-48px;font:800 clamp(110px,17vw,230px)/.8 Syne,sans-serif;letter-spacing:-15px;color:#4c33210a;pointer-events:none}
+.adda-body .adda-heading .eyebrow{color:#a45130;letter-spacing:2.4px}
+.adda-body .adda-heading h1{font-size:clamp(38px,4.8vw,65px);max-width:740px;letter-spacing:-2.4px}
+.adda-body .adda-heading #admin-identity{color:#806a5a}
+.adda-body #logout{position:relative;z-index:1;background:#fff8f0;border-color:#ddc9b8;color:#795741;border-radius:999px}
+.adda-body .adda-stats{gap:12px}
+.adda-body #adda-stats p{border:1px solid #e9dbce;background:#fffaf5;border-radius:15px;box-shadow:0 8px 24px #60432a06;position:relative;overflow:hidden}
+.adda-body #adda-stats p:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#b95b38}
+.adda-body .adda-shell{grid-template-columns:232px minmax(0,1fr);gap:25px}
+.adda-body .adda-nav{background:#fffaf5;border:1px solid #e8d9cc;border-radius:20px;padding:10px;box-shadow:0 10px 32px #62412808}
+.adda-body .adda-nav button{position:relative;text-align:left;border-radius:11px;transition:background .18s,color .18s,transform .18s}
+.adda-body .adda-nav button.active{background:#f2e3d5;color:#9e4e2e;border-color:#dfc4ae;box-shadow:inset 3px 0 #b95b38;font-weight:700}
+.adda-body .adda-nav button:not(.active):hover{background:#f8eee5;color:#5b4032}
+.adda-body .adda-nav a{color:#8c6f5c;border-top:1px solid #e8d9cc}
+.adda-body .adda-content{min-width:0}
+.adda-body #overview-panel>.manager-heading:first-child{padding:4px 0 12px;border-bottom:1px solid #e5d8cb}
+.adda-body #overview-panel>.manager-heading:first-child h2{font-size:30px;letter-spacing:-1.3px}
+.adda-body #admin-analytics-cards{gap:12px}
+.adda-body #admin-analytics-cards>*{background:#fffaf5;border:1px solid #e8d9cc;border-radius:16px;box-shadow:0 8px 24px #61412806}
+.adda-body #overview-panel>.manager-heading:nth-of-type(2){margin-top:28px;align-items:baseline}
+.adda-body #overview-panel>.manager-heading:nth-of-type(2) h2{font-size:25px}
+.adda-body .admin-activity-list{border:1px solid #e8d9cc;border-radius:18px;background:#fffaf5;box-shadow:0 10px 30px #61412805}
+.adda-body .admin-activity-list>*{border-color:#eee2d7;padding:17px 19px}
+.adda-body .admin-activity-list>*:hover{background:#fbf3eb}
+.adda-body .adda-content section .adda-editor{border:1px solid var(--border);box-shadow:0 10px 30px #00000005}
+.adda-body .adda-nav button{letter-spacing:.05px}
+@media(max-width:900px){.adda-body .adda-heading{padding:30px 24px}.adda-body .adda-shell{grid-template-columns:1fr}.adda-body .adda-nav{position:static}}
+@media(max-width:600px){.adda-body .adda-heading{padding:25px 19px;margin:10px 0 16px;border-radius:19px}.adda-body .adda-heading h1{font-size:38px}.adda-body .adda-heading:after{font-size:100px;right:-10px;bottom:-18px;letter-spacing:-7px}.adda-body .adda-nav{display:grid;grid-template-columns:1fr 1fr}.adda-body header nav .secondary{padding:7px 9px;font-size:11px}}
