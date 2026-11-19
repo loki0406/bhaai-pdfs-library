@@ -14,7 +14,7 @@ export default async function handler(req,res){
   const adminRes=await fetch(base+'/rest/v1/rpc/is_library_admin',{method:'POST',headers:{apikey:anon,Authorization:'Bearer '+bearer,'Content-Type':'application/json'},body:'{}',signal:AbortSignal.timeout(10000)});
   if(!adminRes.ok||await adminRes.json()!==true)return res.status(403).json({error:'Admin permission required.'});
   const supabase={configured:Boolean(managementToken&&projectRef),projectRef:projectRef||null,requestCount:null,serviceCounts:null,updatedAt:null,error:null};
-  if(!managementToken||!projectRef){supabase.error='Add SUPABASE_MANAGEMENT_TOKEN and SUPABASE_PROJECT_REF in Vercel environment variables to enable automatic Management API usage data.';}
+  if(!managementToken||!projectRef){supabase.error='Add SUPABASE_MANAGEMENT_TOKEN in Vercel environment variables to enable automatic Management API usage data. The project reference is detected from the Supabase URL.';}
   else{
    const headers={Authorization:'Bearer '+managementToken,Accept:'application/json'};
    const [breakdownRes,totalRes]=await Promise.all([
