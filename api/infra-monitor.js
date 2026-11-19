@@ -5,7 +5,7 @@ export default async function handler(req,res){
  const anon=process.env.VITE_SUPABASE_PUBLISHABLE_KEY||process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY||process.env.SUPABASE_ANON_KEY;
  const managementToken=process.env.SUPABASE_MANAGEMENT_TOKEN;
  const projectRef=process.env.SUPABASE_PROJECT_REF||(base?new URL(base).hostname.split('.')[0]:null);
- const bearer=(req.headers.authorization||'').replace(/^Bearer\\s+/i,'');
+ const bearer=(req.headers.authorization||'').replace(/^Bearer\s+/i,'');
  if(!base||!anon)return res.status(503).json({error:'Supabase server URL and publishable key are not configured.'});
  if(!bearer)return res.status(401).json({error:'Admin session required.'});
  try{
