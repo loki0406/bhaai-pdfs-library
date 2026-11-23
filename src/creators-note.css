@@ -206,3 +206,21 @@ body{transition:background-color .45s ease,color .45s ease}
  .creator-photo-info .creator-profile small{display:none}
  .creator-photo-info .profile-arrow{font-size:12px}
 }
+
+/* Desktop refinement: balanced creator cards with room for photos and LinkedIn */
+@media(min-width:701px){
+ .creators-page{max-width:1080px;padding-left:34px;padding-right:34px}
+ .creators-back{margin-top:18px}
+ .creators-section{padding:20px 0 24px}
+ .creators-section>.eyebrow,.creators-section>h2,.creators-section>p:not(.eyebrow){text-align:center;margin-left:auto;margin-right:auto}
+ .creators-section>p:not(.eyebrow){max-width:620px}
+ .creator-photo-grid{max-width:900px;margin:22px auto 0;gap:22px}
+ .creator-photo-card{display:flex;flex-direction:column}
+ .creator-photo-placeholder{aspect-ratio:16/9;max-height:300px}
+ .creator-photo-info{padding:16px 18px 18px}
+ .creator-photo-info h3{font-size:clamp(18px,1.7vw,22px)}
+ .creator-photo-info>p{font-size:12px;margin:5px 0 12px}
+ .creator-photo-info .creator-profile{padding:12px 14px}
+ .creator-photo-info .creator-profile strong{font-size:13px}
+ .creator-photo-info .creator-profile small{font-size:11px}
+}
