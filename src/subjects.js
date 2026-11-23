@@ -7,5 +7,6 @@ export const subjects = [
  {name:'Operations Management',code:'231ME7O09'}
 ];
 const normalize=value=>String(value||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]/g,'');
-export function findSubject(value){const text=String(value||'');return subjects.find(s=>text.toUpperCase().includes(s.code)||normalize(text)===normalize(s.name));}
+const aliases={ '231CM7T01':['rl','reinforcementlearning'], '231HS7T04':['hrpm','hrandprojectmanagement','humanresourcesprojectmanagement'], '231CS7E02':['blockchain'], '231IT7E03':['bda','bigdataanalytics'], '231EC7O03':['emi','electronicmeasurementsinstrumentations'], '231ME7O09':['om','operationsmanagement'] };
+export function findSubject(value){const text=String(value||''),n=normalize(text);return subjects.find(s=>text.toUpperCase().includes(s.code)||normalize(s.name)===n||(aliases[s.code]||[]).includes(n));}
 export function canonicalSubject(value){return findSubject(value)?.name||value;}
