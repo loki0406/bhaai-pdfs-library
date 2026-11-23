@@ -13,7 +13,7 @@ import {setupNotes} from './notes.js';
 import {setupExtras} from './extras.js';
 import './style.css';
 import {createClient} from '@supabase/supabase-js';
-const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),canonicalCategory=value=>{const v=String(value??'').toLowerCase().replace(/[^a-z0-9]/g,'');return v==='mid1'||v==='midterm1'||v==='firstmid'? 'Mid-1':v==='mid2'||v==='midterm2'||v==='secondmid'?'Mid-2':v==='semester'||v==='sem'||v==='endsemester'?'Semester':v==='general'||v==='other'||v==='otherimpdocuments'?'General':value;};
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),canonicalCategory=value=>{const v=String(value??'').toLowerCase().replace(/[^a-z0-9]/g,'');return v.includes('mid1')||v.includes('midterm1')||v==='firstmid'?'Mid-1':v.includes('mid2')||v.includes('midterm2')||v==='secondmid'?'Mid-2':v.includes('semester')||v==='sem'?'Semester':v.includes('general')||v.includes('other')?'General':value;};
 const url=import.meta.env.VITE_SUPABASE_URL||import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
 const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY||import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const db=url&&key?createClient(url,key):null;
@@ -55,7 +55,7 @@ async function load(){
   render();
   if(gitError&&supabaseError)$('#catalogue-status').textContent='Materials could not be loaded from either source. '+gitError+' · '+supabaseError+' — Please refresh or try again.';
   else if(gitError)$('#catalogue-status').textContent='GitHub catalogue unavailable. Showing Supabase uploads.';
-  else if(supabaseError)$('#catalogue-status').textContent='Supabase uploads unavailable. Showing GitHub catalogue.';
+  else if(supabaseError)$('#catalogue-status').textContent='Supabase uploads unavailable: '+supabaseError+'. Showing GitHub catalogue.';
   else $('#catalogue-status').textContent='';
   try{notes.refreshMaterials();}catch{}
 }
