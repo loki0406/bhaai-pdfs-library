@@ -13,7 +13,7 @@ import {setupNotes} from './notes.js';
 import {setupExtras} from './extras.js';
 import './style.css';
 import {createClient} from '@supabase/supabase-js';
-const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),canonicalCategory=value=>{const v=String(value??'').toLowerCase().replace(/[^a-z0-9]/g,'');return v==='mid1'||v==='midterm1'||v==='firstmid'? 'Mid-1':v==='mid2'||v==='midterm2'||v==='secondmid'?'Mid-2':v==='semester'||v==='sem'||v==='endsemester'?'Semester':v==='general'||v==='other'||v==='otherimpdocuments'?'General':value;};
 const url=import.meta.env.VITE_SUPABASE_URL||import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
 const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY||import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const db=url&&key?createClient(url,key):null;
@@ -42,11 +42,11 @@ async function load(){
   downloadCounts.load().catch(()=>{});
   materialSharing.load().catch(()=>{});
   let git=[],uploads=[],gitError='',supabaseError='';
-  const gitTask=(async()=>{try{const response=await fetch('/catalogue.json',{cache:'no-store'});if(!response.ok)throw Error('Catalogue request failed ('+response.status+')');const data=await response.json();if(!Array.isArray(data))throw Error('Catalogue format is invalid');git=data.map(r=>({...r,subject:canonicalSubject(r.subject)}));}catch(error){gitError=error?.message||'GitHub catalogue unavailable';}})();
+  const gitTask=(async()=>{try{const response=await fetch('/catalogue.json',{cache:'no-store'});if(!response.ok)throw Error('Catalogue request failed ('+response.status+')');const data=await response.json();if(!Array.isArray(data))throw Error('Catalogue format is invalid');git=data.map(r=>({...r,subject:canonicalSubject(r.subject),category:canonicalCategory(r.category)}));}catch(error){gitError=error?.message||'GitHub catalogue unavailable';}})();
   const supabaseTask=(async()=>{if(!db){supabaseError='Supabase connection is not configured';return;}try{
-    const materialsResult=await db.from('resources').select('*').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(8000));
+    const materialsResult=await db.from('resources').select('*').abortSignal(AbortSignal.timeout(12000));
     if(materialsResult.error)throw materialsResult.error;
-    uploads=(materialsResult.data||[]).filter(r=>r.published!==false).map(r=>({...r,subject:canonicalSubject(r.subject),source:'Supabase'}));
+    uploads=(materialsResult.data||[]).filter(r=>r.published!==false).map(r=>({...r,subject:canonicalSubject(r.subject),category:canonicalCategory(r.category),source:'Supabase'}));
     // Sort-order metadata is optional and must not block the materials query.
     try{const orderResult=await db.from('material_order').select('resource_id,position').abortSignal(AbortSignal.timeout(8000));if(!orderResult.error)materialPositions=Object.fromEntries((orderResult.data||[]).map(r=>[r.resource_id,r.position]));}catch{}
   }catch(error){supabaseError=error?.message||'Supabase materials unavailable';}})();
