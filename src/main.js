@@ -44,12 +44,11 @@ async function load(){
   let git=[],uploads=[],gitError='',supabaseError='';
   const gitTask=(async()=>{try{const response=await fetch('/catalogue.json',{cache:'no-store'});if(!response.ok)throw Error('Catalogue request failed ('+response.status+')');const data=await response.json();if(!Array.isArray(data))throw Error('Catalogue format is invalid');git=data.map(r=>({...r,subject:canonicalSubject(r.subject)}));}catch(error){gitError=error?.message||'GitHub catalogue unavailable';}})();
   const supabaseTask=(async()=>{if(!db){supabaseError='Supabase connection is not configured';return;}try{
-    const materialsPromise=db.from('resources').select('*').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(8000));
-    const orderPromise=db.from('material_order').select('resource_id,position').abortSignal(AbortSignal.timeout(8000));
-    const [materialsResult,orderResult]=await Promise.all([materialsPromise,orderPromise]);
+    const materialsResult=await db.from('resources').select('*').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(8000));
     if(materialsResult.error)throw materialsResult.error;
     uploads=(materialsResult.data||[]).filter(r=>r.published!==false).map(r=>({...r,subject:canonicalSubject(r.subject),source:'Supabase'}));
-    if(!orderResult.error)materialPositions=Object.fromEntries((orderResult.data||[]).map(r=>[r.resource_id,r.position]));
+    // Sort-order metadata is optional and must not block the materials query.
+    try{const orderResult=await db.from('material_order').select('resource_id,position').abortSignal(AbortSignal.timeout(8000));if(!orderResult.error)materialPositions=Object.fromEntries((orderResult.data||[]).map(r=>[r.resource_id,r.position]));}catch{}
   }catch(error){supabaseError=error?.message||'Supabase materials unavailable';}})();
   await Promise.allSettled([gitTask,supabaseTask]);
   resources=[...git,...uploads];
